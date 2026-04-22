@@ -702,22 +702,40 @@ footer { border-top:1px solid var(--border); padding:36px 24px; text-align:cente
 })();
 
 /* ─── FORM HANDLER ─── */
-function handleSubmit() {
-  const name  = document.getElementById('nameInput').value.trim();
-  const email = document.getElementById('emailInput').value.trim();
+async function handleSubmit() {
+  const name   = document.getElementById('nameInput').value.trim();
+  const email  = document.getElementById('emailInput').value.trim();
   const create = document.getElementById('createInput').value;
   if (!name)  { alert('Please enter your name.'); return; }
   if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
 
-  // Store locally as backup
-  try {
-    const entries = JSON.parse(localStorage.getItem('sps_waitlist') || '[]');
-    entries.push({ name, email, create, ts: Date.now() });
-    localStorage.setItem('sps_waitlist', JSON.stringify(entries));
-  } catch(e) {}
+  const btn = document.querySelector('.btn');
+  btn.textContent = 'SENDING...';
+  btn.style.opacity = '.7';
+  btn.disabled = true;
 
-  document.getElementById('formContent').style.display = 'none';
-  document.getElementById('successState').style.display = 'block';
+  try {
+    const res = await fetch('https://formspree.io/f/mkokqqge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name, email, create })
+    });
+
+    if (res.ok) {
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('successState').style.display = 'block';
+    } else {
+      alert('Something went wrong. Please try again.');
+      btn.textContent = 'JOIN THE WAITLIST ⚡';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+    }
+  } catch(e) {
+    alert('Connection error. Please try again.');
+    btn.textContent = 'JOIN THE WAITLIST ⚡';
+    btn.style.opacity = '1';
+    btn.disabled = false;
+  }
 }
 </script>
 </body>
