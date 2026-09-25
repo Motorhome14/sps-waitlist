@@ -221,6 +221,223 @@ footer { border-top:1px solid var(--border); padding:36px 24px; text-align:cente
 .divider { width:1px; height:60px; background:linear-gradient(180deg,transparent,var(--border),transparent); margin:0 auto; }
 
 @media(max-width:500px){ .form-card{padding:26px 18px} .grid{grid-template-columns:1fr} .genre-grid{grid-template-columns:1fr 1fr} }
+
+/* ══════════════════════════════════════════════════════════════════
+   SPS NEON BADGE — animación tomada tal cual de styles.css de SPS
+   ══════════════════════════════════════════════════════════════════ */
+@keyframes spsFlicker{
+  0%,100%{opacity:1;filter:drop-shadow(0 0 7px #00f5e4) drop-shadow(0 0 18px rgba(0,245,228,.45))}
+  2%{opacity:.3;filter:none}
+  2.5%{opacity:1;filter:drop-shadow(0 0 12px #00f5e4) drop-shadow(0 0 28px rgba(0,245,228,.6))}
+  3%{opacity:.45;filter:drop-shadow(0 0 3px rgba(0,245,228,.2))}
+  3.5%{opacity:1;filter:drop-shadow(0 0 7px #00f5e4) drop-shadow(0 0 18px rgba(0,245,228,.45))}
+  20%{opacity:1} 20.1%{opacity:.6;filter:drop-shadow(0 0 3px rgba(0,245,228,.15))}
+  20.3%{opacity:1;filter:drop-shadow(0 0 7px #00f5e4) drop-shadow(0 0 18px rgba(0,245,228,.45))}
+  45%{opacity:1} 45.2%{opacity:.15;filter:none} 45.5%{opacity:.15;filter:none}
+  45.8%{opacity:1;filter:drop-shadow(0 0 14px #00f5e4) drop-shadow(0 0 32px rgba(0,245,228,.55))}
+  46.2%{opacity:.4}
+  46.5%{opacity:1;filter:drop-shadow(0 0 7px #00f5e4) drop-shadow(0 0 18px rgba(0,245,228,.45))}
+  70%{opacity:1} 70.5%{opacity:.35;filter:drop-shadow(0 0 2px rgba(0,245,228,.1))}
+  71%{opacity:1;filter:drop-shadow(0 0 7px #00f5e4) drop-shadow(0 0 18px rgba(0,245,228,.45))}
+}
+.sps-mark{
+  width:76px; height:76px; border-radius:16px; overflow:hidden;
+  margin:0 auto 22px; animation:spsFlicker 8s linear infinite, fadeUp .7s ease both;
+}
+.sps-mark img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:16px; }
+@media(prefers-reduced-motion:reduce){ .sps-mark{ animation:fadeUp .7s ease both } }
+
+/* ══════════════════════════════════════════════════════════════════
+   GALERÍA — filas horizontales
+   ══════════════════════════════════════════════════════════════════ */
+.gallery{ padding:0 0 100px; }
+.gal-head{ padding:0 24px; max-width:1120px; margin:0 auto 44px; }
+.gal-row{ position:relative; }
+.gal-rowhead{
+  display:flex; align-items:center; gap:10px;
+  padding:0 24px; max-width:1120px; margin:0 auto 14px;
+}
+.gal-rowtitle{
+  font-family:'Bebas Neue',sans-serif; font-size:19px; letter-spacing:2.5px;
+  color:var(--text); flex:1; min-width:0;
+}
+.gal-count{ font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text3); letter-spacing:1px; }
+.gal-railwrap{ position:relative; }
+.gal-rail{
+  display:flex; gap:12px; overflow-x:auto; scroll-behavior:smooth;
+  scroll-snap-type:x proximity; padding:4px 24px 14px;
+  max-width:1120px; margin:0 auto;
+  scrollbar-width:none; -ms-overflow-style:none;
+}
+.gal-rail::-webkit-scrollbar{ display:none; }
+.gal-arrow{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:3;
+  width:38px; height:64px; border:1px solid var(--border2); border-radius:10px;
+  background:rgba(14,11,8,.82); backdrop-filter:blur(6px);
+  color:var(--text2); font-size:17px; cursor:pointer; display:none;
+  align-items:center; justify-content:center; transition:border-color .2s,color .2s;
+}
+.gal-arrow:hover{ border-color:var(--amber); color:var(--amber3); }
+.gal-arrow.l{ left:8px; } .gal-arrow.r{ right:8px; }
+@media(hover:hover) and (min-width:820px){ .gal-railwrap:hover .gal-arrow{ display:flex } }
+
+.gal-card{
+  position:relative; flex:0 0 auto; width:212px; scroll-snap-align:start;
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  background:var(--panel); cursor:pointer; padding:0; text-align:left;
+  color:inherit; font:inherit; display:block;
+  transition:border-color .22s, box-shadow .22s, transform .22s;
+}
+.gal-card:hover, .gal-card:focus-visible{
+  border-color:rgba(200,120,32,.6);
+  box-shadow:0 0 0 1px rgba(200,120,32,.16), 0 12px 32px rgba(0,0,0,.6);
+  transform:translateY(-3px);
+}
+.gal-card:focus-visible{ outline:2px solid var(--amber3); outline-offset:2px; }
+.gal-card img{ width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+.gal-cap{ padding:9px 11px; border-top:1px solid var(--border); }
+.gal-cap b{ display:block; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500;
+  color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.gal-cap i{ font-style:normal; font-family:'JetBrains Mono',monospace; font-size:8.5px;
+  color:var(--text3); letter-spacing:.5px; }
+.gal-peek{
+  position:absolute; inset:0 0 38px 0;
+  background:linear-gradient(to top,rgba(8,5,2,.95) 34%,rgba(8,5,2,.35));
+  opacity:0; transition:opacity .24s ease; padding:13px;
+  display:flex; flex-direction:column; justify-content:flex-end; gap:7px;
+}
+@media(hover:hover){ .gal-card:hover .gal-peek{ opacity:1 } }
+.gal-peek em{ font-style:normal; font-family:'JetBrains Mono',monospace; font-size:8.5px;
+  letter-spacing:2px; text-transform:uppercase; color:var(--amber3); }
+.gal-peek p{ font-family:'JetBrains Mono',monospace; font-size:10px; line-height:1.55;
+  color:var(--text2); display:-webkit-box; -webkit-line-clamp:5; -webkit-box-orient:vertical; overflow:hidden; }
+.gal-draft{
+  position:absolute; top:8px; left:8px; z-index:2;
+  font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:1.5px;
+  text-transform:uppercase; background:rgba(14,11,8,.9); border:1px solid var(--border2);
+  color:var(--text2); padding:3px 7px; border-radius:5px;
+}
+.gal-empty{ padding:0 24px; max-width:1120px; margin:0 auto;
+  font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text3); }
+
+/* ══════════════════════════════════════════════════════════════════
+   PANEL DEL PROMPT
+   ══════════════════════════════════════════════════════════════════ */
+.pv-scrim{ position:fixed; inset:0; background:rgba(4,2,0,.8); backdrop-filter:blur(3px);
+  z-index:60; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+.pv-scrim.on{ opacity:1; pointer-events:auto; }
+.pv{
+  position:fixed; z-index:61; background:var(--panel); border:1px solid var(--border2);
+  display:flex; flex-direction:column; overflow:hidden;
+  inset:0 0 0 auto; width:min(580px,100%); border-radius:16px 0 0 16px;
+  transform:translateX(102%); transition:transform .34s cubic-bezier(.22,.9,.3,1);
+}
+.pv.on{ transform:none; }
+.pv-head{ display:flex; align-items:center; gap:10px; padding:13px 15px;
+  border-bottom:1px solid var(--border); background:var(--panel2); flex-shrink:0; }
+.pv-rail{ width:3px; height:12px; background:var(--amber); border-radius:2px; flex-shrink:0;
+  box-shadow:0 0 6px var(--amber-glow); }
+.pv-head b{ flex:1; min-width:0; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pv-x{ background:none; border:1px solid var(--border2); border-radius:8px; color:var(--text2);
+  cursor:pointer; font-size:15px; line-height:1; padding:5px 10px; flex-shrink:0; }
+.pv-x:hover{ border-color:var(--amber); color:var(--amber3); }
+.pv-body{ overflow-y:auto; overscroll-behavior:contain; flex:1; -webkit-overflow-scrolling:touch; }
+.pv-shot{ width:100%; display:block; max-height:44vh; object-fit:contain;
+  background:#080502; border-bottom:1px solid var(--border); }
+.pv-bar{ position:sticky; top:0; z-index:2; display:flex; align-items:center; gap:9px;
+  padding:11px 14px; background:rgba(26,21,16,.95); backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.pv-copy{ flex:1; min-width:150px; background:linear-gradient(135deg,var(--amber2),var(--amber));
+  border:none; border-radius:9px; color:#120c05; font-family:'JetBrains Mono',monospace;
+  font-size:11px; font-weight:500; letter-spacing:1.5px; text-transform:uppercase;
+  padding:11px 14px; cursor:pointer; transition:filter .2s; }
+.pv-copy:hover{ filter:brightness(1.12); }
+.pv-copy.ok{ background:linear-gradient(135deg,#4ade80,#22c55e); }
+.pv-toggle{ display:flex; border:1px solid var(--border2); border-radius:8px; overflow:hidden; }
+.pv-toggle button{ background:none; border:none; color:var(--text3); cursor:pointer;
+  font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:1.5px;
+  text-transform:uppercase; padding:9px 12px; }
+.pv-toggle button.on{ background:rgba(200,120,32,.14); color:var(--amber3); }
+.pv-chars{ font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text3);
+  font-variant-numeric:tabular-nums; }
+.pv-blocks{ padding:12px 14px 34px; display:flex; flex-direction:column; gap:7px; }
+.pv-blocks details{ border:1px solid var(--border); border-radius:9px; background:var(--panel2); overflow:hidden; }
+.pv-blocks details[open]{ border-color:var(--border2); }
+.pv-blocks summary{ cursor:pointer; list-style:none; padding:10px 13px; display:flex;
+  align-items:center; gap:9px; font-family:'JetBrains Mono',monospace; font-size:9.5px;
+  letter-spacing:2px; text-transform:uppercase; color:var(--amber3); }
+.pv-blocks summary::-webkit-details-marker{ display:none; }
+.pv-blocks summary::after{ content:'+'; margin-left:auto; color:var(--text3); font-size:13px; }
+.pv-blocks details[open] summary::after{ content:'\2212'; }
+.pv-blocks summary:hover{ background:rgba(200,120,32,.05); }
+.pv-blocks .bd{ padding:0 13px 12px; font-family:'JetBrains Mono',monospace; font-size:11.5px;
+  line-height:1.75; color:var(--text2); white-space:pre-wrap; word-break:break-word; }
+.pv-blocks .bd li{ list-style:none; padding-left:14px; position:relative; margin-bottom:5px; }
+.pv-blocks .bd li::before{ content:'\2022'; position:absolute; left:0; color:var(--amber); }
+.pv-raw{ margin:0; padding:14px; font-family:'JetBrains Mono',monospace; font-size:11px;
+  line-height:1.7; color:var(--text2); white-space:pre; overflow-x:auto; }
+
+/* ══════════════════════════════════════════════════════════════════
+   MODO ADMIN
+   ══════════════════════════════════════════════════════════════════ */
+.ad-bar{ position:fixed; left:0; right:0; bottom:0; z-index:70;
+  background:rgba(14,11,8,.96); backdrop-filter:blur(10px); border-top:1px solid var(--amber);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.ad-bar .tag{ font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:2px;
+  text-transform:uppercase; color:var(--amber3); border:1px solid rgba(200,120,32,.3);
+  border-radius:999px; padding:4px 11px; }
+.ad-bar input{ flex:1; min-width:180px; background:rgba(26,21,16,.9); border:1px solid var(--border2);
+  border-radius:8px; padding:9px 12px; font-family:'JetBrains Mono',monospace; font-size:11px;
+  color:var(--text); outline:none; }
+.ad-bar input:focus{ border-color:var(--amber); }
+.ad-msg{ font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text2); }
+.ad-msg.ok{ color:var(--green); } .ad-msg.err{ color:#ff6a6a; }
+.btn-s{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1.2px;
+  text-transform:uppercase; padding:9px 13px; border-radius:8px; cursor:pointer;
+  background:rgba(200,120,32,.12); border:1px solid rgba(200,120,32,.4); color:var(--amber3); }
+.btn-s:hover{ background:rgba(200,120,32,.22); }
+.btn-s.ghost{ background:none; border-color:var(--border2); color:var(--text2); }
+.btn-s.ghost:hover{ border-color:var(--amber); color:var(--amber3); }
+.btn-s.danger{ background:rgba(255,80,80,.08); border-color:rgba(255,80,80,.35); color:#ff8080; }
+.ad-only{ display:none; }
+body.admin .ad-only{ display:inline-flex; }
+body.admin{ padding-bottom:72px; }
+.ad-rowtools{ display:none; gap:5px; }
+body.admin .ad-rowtools{ display:flex; }
+.gal-add{ flex:0 0 auto; width:212px; min-height:220px; border:1px dashed var(--border2);
+  border-radius:12px; background:rgba(200,120,32,.04); color:var(--amber3); cursor:pointer;
+  display:none; flex-direction:column; align-items:center; justify-content:center; gap:7px;
+  font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:2px; text-transform:uppercase; }
+body.admin .gal-add{ display:flex; }
+.gal-add:hover{ border-color:var(--amber); background:rgba(200,120,32,.1); }
+.gal-add i{ font-style:normal; font-size:28px; line-height:1; }
+
+.dlg-scrim{ position:fixed; inset:0; background:rgba(4,2,0,.82); backdrop-filter:blur(4px);
+  z-index:80; display:none; align-items:center; justify-content:center; padding:16px; }
+.dlg-scrim.on{ display:flex; }
+.dlg{ background:var(--panel); border:1px solid var(--border2); border-radius:14px;
+  width:min(560px,100%); max-height:88svh; overflow-y:auto; padding:22px; }
+.dlg h3{ font-family:'Bebas Neue',sans-serif; font-size:21px; letter-spacing:2px;
+  color:var(--text); margin-bottom:16px; }
+.dlg .field textarea{ width:100%; min-height:190px; resize:vertical;
+  background:rgba(14,11,8,.7); border:1px solid var(--border2); border-radius:8px;
+  padding:11px 13px; font-family:'JetBrains Mono',monospace; font-size:11.5px;
+  line-height:1.6; color:var(--text); outline:none; }
+.dlg .field textarea:focus{ border-color:var(--amber); }
+.dlg .row2{ display:flex; gap:9px; flex-wrap:wrap; margin-top:16px; }
+.dlg .chk{ display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace;
+  font-size:10.5px; color:var(--text2); margin-top:4px; }
+.dlg .prev{ width:84px; border-radius:8px; border:1px solid var(--border); display:none; margin-top:8px; }
+
+@media(max-width:720px){
+  .pv{ inset:auto 0 0 0; width:100%; height:88svh; border-radius:16px 16px 0 0; transform:translateY(102%); }
+  .pv.on{ transform:none; }
+  .pv-shot{ max-height:32svh; }
+  .gal-card, .gal-add{ width:156px; }
+}
+
 </style>
 </head>
 <body>
@@ -231,6 +448,7 @@ footer { border-top:1px solid var(--border); padding:36px 24px; text-align:cente
 <section class="hero">
   <div class="badge"><span class="badge-dot"></span>Early Access — Coming Soon</div>
 
+  <div class="sps-mark"><img src="gallery/sps-mark.jpg" alt="SPS"></div>
   <div class="logo">Scene Prompt<br>Studio</div>
   <div class="domain">scene.prompt.studio</div>
   <div class="vline"></div>
@@ -258,16 +476,16 @@ footer { border-top:1px solid var(--border); padding:36px 24px; text-align:cente
 
   <div class="form-wrap">
     <div class="form-card">
-      <div class="form-title">Join Early Access</div>
-      <div class="form-sub">Be first in when we open the doors</div>
+      <div class="form-title">Request the Demo</div>
+      <div class="form-sub">24-hour trial · we send you the link</div>
       <div id="formContent">
         <div class="field">
           <label>Your Name</label>
           <input type="text" id="nameInput" placeholder="Your name" autocomplete="name" />
         </div>
         <div class="field">
-          <label>Email Address</label>
-          <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" />
+          <label>Email or Instagram</label>
+          <input type="text" id="emailInput" placeholder="your@email.com   ·   @yourhandle" autocomplete="email" />
         </div>
         <div class="field">
           <label>What would you build first?</label>
@@ -290,41 +508,60 @@ footer { border-top:1px solid var(--border); padding:36px 24px; text-align:cente
             <option>🤰 Maternity body paint</option>
           </select>
         </div>
-        <button class="btn" onclick="handleSubmit()">JOIN THE WAITLIST ⚡</button>
+        <button class="btn" onclick="handleSubmit()">REQUEST THE DEMO ⚡</button>
       </div>
       <div class="success" id="successState">
         <div class="success-icon">⚡</div>
-        <div class="success-title">You're In.</div>
-        <p class="success-body">Welcome to the Scene Prompt Studio early access list.<br>We'll reach out the moment the doors open.<br><br>Something big is coming. 🖤</p>
+        <div class="success-title">Request Sent.</div>
+        <p class="success-body">We'll send you the 24-hour demo link.<br>Check the inbox — or your DMs if you left a handle.<br><br>Something big is coming. 🖤</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TICKER 1 -->
-<div class="ticker-wrap">
-  <div class="ticker">
-    <span class="ticker-item">🐉 FANTASY SKIN <span>·</span></span>
-    <span class="ticker-item">🎨 BODY PAINT ART <span>·</span></span>
-    <span class="ticker-item">🦸 SUPERHERO AI <span>·</span></span>
-    <span class="ticker-item">🧬 BIOMECHANICAL <span>·</span></span>
-    <span class="ticker-item">🎌 ANIME STYLES <span>·</span></span>
-    <span class="ticker-item">🌊 DARK FANTASY <span>·</span></span>
-    <span class="ticker-item">🏎 CARS EDITORIAL <span>·</span></span>
-    <span class="ticker-item">🖌️ FINE ART MASTERS <span>·</span></span>
-    <span class="ticker-item">🎬 FRAME DIRECTOR <span>·</span></span>
-    <span class="ticker-item">🐾 ANIMAL FUSION <span>·</span></span>
-    <span class="ticker-item">🐉 FANTASY SKIN <span>·</span></span>
-    <span class="ticker-item">🎨 BODY PAINT ART <span>·</span></span>
-    <span class="ticker-item">🦸 SUPERHERO AI <span>·</span></span>
-    <span class="ticker-item">🧬 BIOMECHANICAL <span>·</span></span>
-    <span class="ticker-item">🎌 ANIME STYLES <span>·</span></span>
-    <span class="ticker-item">🌊 DARK FANTASY <span>·</span></span>
-    <span class="ticker-item">🏎 CARS EDITORIAL <span>·</span></span>
-    <span class="ticker-item">🖌️ FINE ART MASTERS <span>·</span></span>
-    <span class="ticker-item">🎬 FRAME DIRECTOR <span>·</span></span>
-    <span class="ticker-item">🐾 ANIMAL FUSION <span>·</span></span>
+<!-- ══ PROMPT GALLERY ══ -->
+<section class="gallery" id="gallery">
+  <div class="gal-head">
+    <div class="section-label" id="galLabel">Prompt Gallery</div>
+    <div class="section-title" id="galTitle">Made in SPS</div>
+    <div class="section-sub" id="galSub"></div>
+    <div style="text-align:center;margin-top:-34px;margin-bottom:26px;">
+      <button class="btn-s ad-only" id="adEditHead">Edit heading</button>
+    </div>
   </div>
+  <div id="galRows"></div>
+</section>
+
+<!-- ══ PANEL DEL PROMPT ══ -->
+<div class="pv-scrim" id="pvScrim"></div>
+<aside class="pv" id="pv" role="dialog" aria-modal="true" aria-label="Prompt">
+  <div class="pv-head">
+    <span class="pv-rail"></span>
+    <b id="pvTitle">—</b>
+    <button class="btn-s ghost ad-only" id="pvEdit">Edit</button>
+    <button class="pv-x" id="pvX" aria-label="Cerrar">&#10005;</button>
+  </div>
+  <div class="pv-body">
+    <img class="pv-shot" id="pvShot" alt="">
+    <div class="pv-bar">
+      <button class="pv-copy" id="pvCopy">Copy prompt</button>
+      <div class="pv-toggle">
+        <button id="pvB" class="on">Blocks</button><button id="pvR">YAML</button>
+      </div>
+      <span class="pv-chars" id="pvChars"></span>
+    </div>
+    <div id="pvContent"></div>
+  </div>
+</aside>
+
+<!-- ══ DIÁLOGOS DE ADMIN ══ -->
+<div class="dlg-scrim" id="dlgScrim"><div class="dlg" id="dlg"></div></div>
+
+<!-- ══ BARRA DE ADMIN ══ -->
+<div class="ad-bar" id="adBar" style="display:none;">
+  <span class="tag">Admin</span>
+  <input id="adTok" type="password" placeholder="Paste your GitHub token" autocomplete="off" spellcheck="false">
+  <span class="ad-msg" id="adMsg">The token stays in this tab only</span>
 </div>
 
 <!-- FEATURES — CORE MODULES -->
@@ -449,6 +686,32 @@ footer { border-top:1px solid var(--border); padding:36px 24px; text-align:cente
 
   </div>
 </section>
+
+<!-- TICKER 1 -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">🐉 FANTASY SKIN <span>·</span></span>
+    <span class="ticker-item">🎨 BODY PAINT ART <span>·</span></span>
+    <span class="ticker-item">🦸 SUPERHERO AI <span>·</span></span>
+    <span class="ticker-item">🧬 BIOMECHANICAL <span>·</span></span>
+    <span class="ticker-item">🎌 ANIME STYLES <span>·</span></span>
+    <span class="ticker-item">🌊 DARK FANTASY <span>·</span></span>
+    <span class="ticker-item">🏎 CARS EDITORIAL <span>·</span></span>
+    <span class="ticker-item">🖌️ FINE ART MASTERS <span>·</span></span>
+    <span class="ticker-item">🎬 FRAME DIRECTOR <span>·</span></span>
+    <span class="ticker-item">🐾 ANIMAL FUSION <span>·</span></span>
+    <span class="ticker-item">🐉 FANTASY SKIN <span>·</span></span>
+    <span class="ticker-item">🎨 BODY PAINT ART <span>·</span></span>
+    <span class="ticker-item">🦸 SUPERHERO AI <span>·</span></span>
+    <span class="ticker-item">🧬 BIOMECHANICAL <span>·</span></span>
+    <span class="ticker-item">🎌 ANIME STYLES <span>·</span></span>
+    <span class="ticker-item">🌊 DARK FANTASY <span>·</span></span>
+    <span class="ticker-item">🏎 CARS EDITORIAL <span>·</span></span>
+    <span class="ticker-item">🖌️ FINE ART MASTERS <span>·</span></span>
+    <span class="ticker-item">🎬 FRAME DIRECTOR <span>·</span></span>
+    <span class="ticker-item">🐾 ANIMAL FUSION <span>·</span></span>
+  </div>
+</div>
 
 <!-- GENRES -->
 <section class="genres">
@@ -707,7 +970,9 @@ async function handleSubmit() {
   const email  = document.getElementById('emailInput').value.trim();
   const create = document.getElementById('createInput').value;
   if (!name)  { alert('Please enter your name.'); return; }
-  if (!email || !email.includes('@')) { alert('Please enter a valid email.'); return; }
+  var isMail   = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  var isHandle = /^@?[A-Za-z0-9._]{2,30}$/.test(email);
+  if (!email || (!isMail && !isHandle)) { alert('Enter an email address or an Instagram handle.'); return; }
 
   const btn = document.querySelector('.btn');
   btn.textContent = 'SENDING...';
@@ -718,7 +983,7 @@ async function handleSubmit() {
     const res = await fetch('https://formspree.io/f/mkokqqge', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ name, email, create })
+      body: JSON.stringify({ name, contact: email, create })
     });
 
     if (res.ok) {
@@ -738,5 +1003,436 @@ async function handleSubmit() {
   }
 }
 </script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   PROMPT GALLERY  +  MODO ADMIN
+   ------------------------------------------------------------------
+   · Todo el contenido vive en content.json (encabezado + piezas).
+     Una sola fila horizontal; el orden es el del archivo.
+   · El modo admin se abre con  ?admin  o  #admin  y se activa pegando
+     un token de GitHub. El token queda SOLO en esta pestaña; nunca se
+     guarda en el repo ni sobrevive al cierre del navegador.
+   · Cada cambio se comitea al repo al momento. Las imágenes se achican
+     en el navegador antes de subirlas.
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+'use strict';
+
+var REPO   = { owner:'motorhome14', name:'sps-waitlist', branch:'main' };
+var IMGDIR = 'gallery/';
+var DATA   = 'content.json';
+
+/* Copia de arranque. Se usa cuando content.json no se puede leer:
+   al abrir el archivo con doble clic (file:// bloquea leer datos) o si
+   todavía no lo subiste. Una vez que el sitio corre en GitHub Pages,
+   content.json manda siempre y esta copia no se usa nunca. */
+var FALLBACK = {
+  "head": {
+    "label": "Prompt Gallery",
+    "title": "Made in SPS",
+    "sub": "Every image here was built by choosing from the studio's libraries — camera, lighting, skin, wardrobe, pose, location — and SPS assembled the prompt from those choices. What you see is exactly what it produced. Open one and take it."
+  },
+  "items": [
+    {
+      "id": "i1",
+      "title": "Red Riding Hood",
+      "img": "gallery/red-riding-wolf.jpg",
+      "yaml": "task: dark_fantasy_portrait_red_riding\ndirective: \"RED RIDING HOOD AND THE WOLF — RAIN-SOAKED FOREST, CINEMATIC HALF-LENGTH PORTRAIT\"\n\ninstruction: >\n  Half-length portrait of a young woman in a red riding cape holding a grey wolf close to her\n  chest, both facing camera, caught in falling rain against a dark pine forest. Calm, steady,\n  unafraid — the wolf is hers, not a threat.\n\nsubject:\n  - Adult woman, mid twenties, Mediterranean features, dark hair in two tight dutch braids\n  - Real skin with visible pores, rain beading on the forehead and cheekbone, no retouching\n  - Small stud earrings, bare face, no glamour makeup\n\nwardrobe:\n  - Deep red velvet hooded cape with white lace trim, tied at the throat with a red ribbon\n  - White off-shoulder peasant blouse with lace cuffs, black corset bodice over it\n\nanimal:\n  - Adult grey wolf, thick winter coat, amber eyes to camera, ears up and relaxed\n  - Fur wet at the guard hairs, individual hair detail, no CGI smoothness\n\ncamera_gear:\n  - Shot on ARRI Alexa 35 with an 85mm prime at f/2.0, eye level, subject filling the frame\n\nlighting:\n  - Single large softbox front left, cool moonlight rim from behind right through the rain\n  - Deep open shadows, rain lit so each drop reads against the dark trees\n\ngrade: \"Desaturated cool green-grey forest, red cape held as the only saturated colour, filmic contrast\"\n\nnegative_prompt: \"plastic skin, airbrushed, beauty filter, cartoon wolf, CGI fur, dry hair in rain, changed identity, extra fingers, warped hands, oversaturated, low resolution\"\n",
+      "draft": false
+    },
+    {
+      "id": "i2",
+      "title": "Raven Shaman",
+      "img": "gallery/raven-shaman.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i3",
+      "title": "Raven Queen",
+      "img": "gallery/raven-queen.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i4",
+      "title": "Lava Eye",
+      "img": "gallery/lava-eye.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i5",
+      "title": "Tiger Eye",
+      "img": "gallery/tiger-eye.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i6",
+      "title": "Forest Nymph",
+      "img": "gallery/forest-nymph.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i7",
+      "title": "Raptors at Dawn",
+      "img": "gallery/raptors-beach.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i8",
+      "title": "Mirror Strength",
+      "img": "gallery/mirror-strength.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i9",
+      "title": "After the Swim",
+      "img": "gallery/after-swim.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    }
+  ]
+};
+var usingSeed = false;
+
+var C = null;          // contenido vivo
+var TOKEN = '';        // token de GitHub, solo en memoria de la pestaña
+var SHA = null;        // sha actual de content.json, para poder actualizarlo
+var view = 'blocks';   // blocks | raw
+var openItem = null;
+var wantAdmin = false;
+
+var $  = function(id){ return document.getElementById(id); };
+var el = function(t, cls, html){ var n=document.createElement(t); if(cls)n.className=cls;
+                                 if(html!=null)n.innerHTML=html; return n; };
+var esc = function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+var uid = function(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); };
+
+/* ── 1. Lector de YAML ────────────────────────────────────────────
+   Hecho a la medida de la forma que usa SPS: claves de primer nivel,
+   textos sueltos, bloques con > o |, y listas con guion.
+   NO es un parser de YAML completo y no pretende serlo.             */
+function parseYAML(src){
+  var lines = String(src||'').replace(/\r/g,'').split('\n');
+  var out = [], cur = null, mode = null;
+  function unq(s){ return s.replace(/^["']|["']$/g,'').trim(); }
+  function pretty(k){
+    var small = {and:1, or:1, of:1, the:1, a:1, an:1, to:1, in:1, on:1, for:1, with:1};
+    return k.split('_').map(function(w,i){
+      return (i>0 && small[w.toLowerCase()]) ? w.toLowerCase()
+           : w.charAt(0).toUpperCase() + w.slice(1);
+    }).join(' ');
+  }
+  for (var i=0;i<lines.length;i++){
+    var raw = lines[i], line = raw.trim();
+    if (line.charAt(0) === '#') continue;
+    var m = raw.match(/^([A-Za-z0-9_\-]+):\s*(.*)$/);
+    if (m){
+      cur = { label:pretty(m[1]), items:[], text:'' };
+      out.push(cur);
+      var v = m[2].trim();
+      if (v === '>' || v === '|' || v === '>-' || v === '|-'){ mode = 'block'; }
+      else if (v){ cur.text = unq(v); mode = null; }
+      else { mode = 'auto'; }
+      continue;
+    }
+    if (!cur || !line) continue;
+    if (line.indexOf('- ') === 0){ cur.items.push(unq(line.slice(2))); mode = 'list'; continue; }
+    if (mode === 'block' || mode === 'auto'){ cur.text += (cur.text ? ' ' : '') + line; }
+  }
+  return out.filter(function(b){ return b.text || b.items.length; });
+}
+
+/* ── 2. Dibujar la galería ───────────────────────────────────────── */
+function visible(){
+  var admin = document.body.classList.contains('admin');
+  return C.items.filter(function(it){ return admin || !it.draft; });
+}
+
+function render(){
+  var h = C.head || {};
+  $('galLabel').textContent = h.label || 'Prompt Gallery';
+  $('galTitle').textContent = h.title || 'Made in SPS';
+  $('galSub').textContent   = h.sub   || '';
+
+  var box = $('galRows'); box.innerHTML = '';
+  var list = visible();
+
+  var wrap = el('div','gal-railwrap');
+  var rail = el('div','gal-rail');
+  list.forEach(function(it){ rail.appendChild(card(it)); });
+  var add = el('button','gal-add','<i>+</i>Add');
+  add.onclick = function(){ dlgItem(null); };
+  rail.appendChild(add);
+  wrap.appendChild(rail);
+
+  [['l','\u2039',-1],['r','\u203A',1]].forEach(function(a){
+    var b = el('button','gal-arrow '+a[0], a[1]);
+    b.onclick = function(){ rail.scrollBy({ left: a[2]*rail.clientWidth*0.82, behavior:'smooth' }); };
+    wrap.appendChild(b);
+  });
+  box.appendChild(wrap);
+
+  if (!list.length && !document.body.classList.contains('admin'))
+    box.appendChild(el('div','gal-empty','Nothing here yet.'));
+}
+
+function card(it){
+  var b = el('button','gal-card');
+  var blocks = parseYAML(it.yaml);
+  var flat = blocks.map(function(x){ return x.items.length ? x.items.join(' ') : x.text; }).join(' ');
+  b.innerHTML =
+    (it.draft ? '<span class="gal-draft">Draft</span>' : '') +
+    '<img src="' + esc(it.img) + '" alt="' + esc(it.title) + '" loading="lazy">' +
+    '<div class="gal-peek"><em>Prompt</em><p>' + esc(flat.slice(0,180)) + '…</p></div>' +
+    '<div class="gal-cap"><b>' + esc(it.title) + '</b><i>' + (it.yaml ? it.yaml.length + ' chars' : 'no prompt') + '</i></div>';
+  b.onclick = function(){ openPanel(it); };
+  return b;
+}
+
+/* ── 3. Panel del prompt ─────────────────────────────────────────── */
+function openPanel(it){
+  openItem = it;
+  $('pvTitle').textContent = it.title;
+  $('pvShot').src = it.img;
+  $('pvChars').textContent = (it.yaml||'').length + ' chars';
+  paintPrompt();
+  $('pv').classList.add('on'); $('pvScrim').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closePanel(){
+  $('pv').classList.remove('on'); $('pvScrim').classList.remove('on');
+  document.body.style.overflow = ''; openItem = null;
+}
+function paintPrompt(){
+  var box = $('pvContent'); var y = openItem.yaml || '';
+  $('pvB').classList.toggle('on', view==='blocks');
+  $('pvR').classList.toggle('on', view==='raw');
+  if (view === 'raw'){ box.innerHTML = '<pre class="pv-raw">' + esc(y) + '</pre>'; return; }
+  var blocks = parseYAML(y);
+  if (!blocks.length){ box.innerHTML = '<div class="pv-blocks"><div class="bd">' + esc(y) + '</div></div>'; return; }
+  box.innerHTML = '<div class="pv-blocks">' + blocks.map(function(b,i){
+    var body = b.items.length
+      ? '<ul class="bd">' + b.items.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('') + '</ul>'
+      : '<div class="bd">' + esc(b.text) + '</div>';
+    return '<details' + (i<2 ? ' open' : '') + '><summary>' + esc(b.label) + '</summary>' + body + '</details>';
+  }).join('') + '</div>';
+}
+function copyPrompt(btn){
+  var text = (openItem && openItem.yaml) || '';
+  function done(ok){
+    btn.textContent = ok ? 'Copied ✓' : 'Select and copy';
+    btn.classList.toggle('ok', ok);
+    setTimeout(function(){ btn.textContent = 'Copy prompt'; btn.classList.remove('ok'); }, 2000);
+  }
+  try {
+    navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ legacyCopy(text,done); });
+  } catch(e){ legacyCopy(text,done); }
+}
+function legacyCopy(text, done){
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+  document.body.appendChild(ta); ta.select();
+  var ok = false; try { ok = document.execCommand('copy'); } catch(e){}
+  ta.remove(); done(ok);
+}
+
+/* ── 4. Diálogos propios (window.prompt/confirm no sirven acá) ───── */
+function dlgOpen(html, wire){
+  var d = $('dlg'); d.innerHTML = html; $('dlgScrim').classList.add('on');
+  if (wire) wire(d);
+}
+function dlgClose(){ $('dlgScrim').classList.remove('on'); $('dlg').innerHTML = ''; }
+
+function dlgHead(){
+  var h = C.head || {};
+  dlgOpen(
+    '<h3>Gallery heading</h3>' +
+    '<div class="field"><label>Label</label><input id="hL" value="'+esc(h.label||'')+'"></div>' +
+    '<div class="field"><label>Title</label><input id="hT" value="'+esc(h.title||'')+'"></div>' +
+    '<div class="field"><label>Intro</label><textarea id="hS" style="min-height:80px">'+esc(h.sub||'')+'</textarea></div>' +
+    '<div class="row2"><button class="btn-s" id="hOk">Save</button>' +
+    '<button class="btn-s ghost" id="hNo">Cancel</button></div>',
+    function(d){
+      d.querySelector('#hNo').onclick = dlgClose;
+      d.querySelector('#hOk').onclick = function(){
+        C.head = { label:d.querySelector('#hL').value.trim(),
+                   title:d.querySelector('#hT').value.trim(),
+                   sub:d.querySelector('#hS').value.trim() };
+        dlgClose(); render(); save('Heading saved');
+      };
+    });
+}
+
+function dlgItem(it){
+  var isNew = !it;
+  dlgOpen(
+    '<h3>' + (isNew ? 'New item' : 'Edit item') + '</h3>' +
+    '<div class="field"><label>Title</label><input id="iT" value="'+esc(isNew?'':it.title)+'" placeholder="Red Riding Hood"></div>' +
+    '<div class="field"><label>Image' + (isNew?'':' (leave empty to keep the current one)') + '</label>' +
+    '<input type="file" id="iF" accept="image/*"><img class="prev" id="iP"></div>' +
+    '<div class="field"><label>Prompt (YAML — paste it as it is)</label>' +
+    '<textarea id="iY" placeholder="task: ...&#10;framing:&#10;  - ...">'+esc(isNew?'':(it.yaml||''))+'</textarea></div>' +
+    '<label class="chk"><input type="checkbox" id="iD"'+((!isNew&&it.draft)?' checked':'')+'> Draft (nobody sees it)</label>' +
+    '<div class="row2"><button class="btn-s" id="iOk">Save</button>' +
+    '<button class="btn-s ghost" id="iNo">Cancel</button>' +
+    (isNew?'':'<button class="btn-s danger" id="iDel" style="margin-left:auto">Delete</button>') + '</div>',
+    function(d){
+      var blob = null;
+      d.querySelector('#iF').onchange = function(){
+        var f = this.files && this.files[0]; if (!f) return;
+        shrink(f, function(b, url){ blob = b; var p = d.querySelector('#iP'); p.src = url; p.style.display = 'block'; });
+      };
+      d.querySelector('#iNo').onclick = dlgClose;
+      if (d.querySelector('#iDel')) d.querySelector('#iDel').onclick = function(){
+        C.items = C.items.filter(function(x){ return x !== it; });
+        dlgClose(); closePanel(); render(); save('Item deleted');
+      };
+      d.querySelector('#iOk').onclick = function(){
+        var t = d.querySelector('#iT').value.trim() || 'Untitled';
+        var y = d.querySelector('#iY').value;
+        var dr = d.querySelector('#iD').checked;
+        if (isNew && !blob){ msg('Pick an image first','err'); return; }
+        var finish = function(path){
+          if (isNew) C.items.push({ id:uid(), title:t, img:path, yaml:y, draft:dr });
+          else { it.title=t; it.yaml=y; it.draft=dr; if (path) it.img = path; }
+          dlgClose(); render(); save('Item saved');
+        };
+        if (blob){
+          var name = IMGDIR + slug(t) + '-' + uid() + '.jpg';
+          msg('Uploading the image…','');
+          putFile(name, blob, true, 'gallery: ' + t)
+            .then(function(){ finish(name); })
+            .catch(function(e){ msg('Could not upload the image: ' + e.message, 'err'); });
+        } else finish(null);
+      };
+    });
+}
+function slug(s){
+  return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40) || 'img';
+}
+
+/* ── 5. Achicar la imagen en el navegador antes de subirla ───────── */
+function shrink(file, cb){
+  var fr = new FileReader();
+  fr.onload = function(){
+    var im = new Image();
+    im.onload = function(){
+      var MAX = 1000;
+      var s = Math.min(1, MAX / Math.max(im.width, im.height));
+      var cv = document.createElement('canvas');
+      cv.width  = Math.round(im.width  * s);
+      cv.height = Math.round(im.height * s);
+      cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+      cv.toBlob(function(b){ cb(b, cv.toDataURL('image/jpeg', .5)); }, 'image/jpeg', .82);
+    };
+    im.src = fr.result;
+  };
+  fr.readAsDataURL(file);
+}
+
+/* ── 6. Guardar en GitHub ────────────────────────────────────────── */
+function b64(str){
+  return btoa(String.fromCharCode.apply(null, new TextEncoder().encode(str)));
+}
+function blobB64(blob){
+  return new Promise(function(res, rej){
+    var fr = new FileReader();
+    fr.onload = function(){ res(String(fr.result).split(',')[1]); };
+    fr.onerror = rej; fr.readAsDataURL(blob);
+  });
+}
+function api(path, opts){
+  return fetch('https://api.github.com/repos/' + REPO.owner + '/' + REPO.name + '/contents/' + path,
+    Object.assign({ headers:{ 'Authorization':'Bearer ' + TOKEN, 'Accept':'application/vnd.github+json' } }, opts||{}))
+    .then(function(r){
+      if (r.status === 401 || r.status === 403) throw new Error('the token has no permission on this repo');
+      return r.json().then(function(j){
+        if (!r.ok && r.status !== 404) throw new Error(j.message || ('HTTP ' + r.status));
+        return { status:r.status, body:j };
+      });
+    });
+}
+function putFile(path, content, isBlob, message){
+  var body = isBlob ? blobB64(content) : Promise.resolve(b64(content));
+  return body.then(function(b){
+    return api(path).then(function(cur){
+      var payload = { message:message, content:b, branch:REPO.branch };
+      if (cur.status === 200 && cur.body.sha) payload.sha = cur.body.sha;
+      return api(path, { method:'PUT', body:JSON.stringify(payload) });
+    });
+  }).then(function(r){
+    if (r.status >= 400) throw new Error(r.body.message || ('HTTP ' + r.status));
+    return r.body;
+  });
+}
+function save(what){
+  if (!TOKEN){ msg('Paste the token before saving','err'); return; }
+  msg('Saving…','');
+  putFile(DATA, JSON.stringify(C, null, 2), false, 'gallery: ' + what)
+    .then(function(){ msg(what + ' ✓ — GitHub Pages takes ~30 s to republish','ok'); })
+    .catch(function(e){ msg('Could not save: ' + e.message, 'err'); });
+}
+function msg(t, cls){ var m = $('adMsg'); m.textContent = t; m.className = 'ad-msg ' + (cls||''); }
+
+/* ── 7. Arranque ─────────────────────────────────────────────────── */
+function boot(){
+  function checkAdmin(){
+    wantAdmin = /(^|[?&])admin(=|&|$)/.test(location.search) || location.hash === '#admin';
+    $('adBar').style.display = wantAdmin ? 'flex' : 'none';
+    if (!wantAdmin){ document.body.classList.remove('admin'); if (C) render(); return; }
+    try { TOKEN = TOKEN || sessionStorage.getItem('sps_gh') || ''; } catch(e){}
+    if (TOKEN){ $('adTok').value = TOKEN; document.body.classList.add('admin'); }
+    if (C) render();
+  }
+  checkAdmin();
+  // Escribir #admin en la barra de direcciones no recarga la pagina,
+  // asi que hay que escuchar el cambio de hash a mano.
+  addEventListener('hashchange', checkAdmin);
+  $('adTok').onchange = $('adTok').oninput = function(){
+    TOKEN = this.value.trim();
+    document.body.classList.toggle('admin', !!TOKEN);
+    try { sessionStorage.setItem('sps_gh', TOKEN); } catch(e){}
+    render();
+    msg(TOKEN ? 'Admin mode on' : 'No token \u2014 nothing can be saved', TOKEN ? 'ok' : '');
+  };
+  $('adEditHead').onclick = dlgHead;
+  $('pvX').onclick = closePanel;
+  $('pvScrim').onclick = closePanel;
+  $('dlgScrim').onclick = function(e){ if (e.target === this) dlgClose(); };
+  addEventListener('keydown', function(e){ if (e.key === 'Escape'){ dlgClose(); closePanel(); } });
+  $('pvB').onclick = function(){ view='blocks'; paintPrompt(); };
+  $('pvR').onclick = function(){ view='raw';    paintPrompt(); };
+  $('pvCopy').onclick = function(){ copyPrompt(this); };
+  $('pvEdit').onclick = function(){ if (openItem) dlgItem(openItem); };
+
+  fetch(DATA, { cache:'no-store' })
+    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .catch(function(e){
+      usingSeed = true;
+      console.warn('[galeria] no pude leer ' + DATA + ' (' + e.message + '). Uso la copia de arranque.');
+      return FALLBACK;
+    })
+    .then(function(j){
+      C = (j && j.items) ? j : FALLBACK;
+      C.items = C.items || []; C.head = C.head || {};
+      render();
+      if (usingSeed && wantAdmin)
+        msg('Heads up: ' + DATA + ' could not be read \u2014 you are seeing the built-in seed. Do not save over it.', 'err');
+    });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+})();
+</script>
 </body>
 </html>
+
