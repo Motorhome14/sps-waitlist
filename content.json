@@ -1,0 +1,99 @@
+{
+  "head": {
+    "label": "Prompt Gallery",
+    "title": "Made in SPS",
+    "sub": "Every image here was built by choosing from the studio's libraries — camera, lighting, skin, wardrobe, pose, location — and SPS assembled the prompt from those choices. What you see is exactly what it produced. Open one and take it."
+  },
+  "rows": [
+    {
+      "id": "r-dark",
+      "title": "Dark Fantasy"
+    },
+    {
+      "id": "r-macro",
+      "title": "Macro & Body Paint"
+    },
+    {
+      "id": "r-crea",
+      "title": "Creatures & Fantasy"
+    },
+    {
+      "id": "r-edit",
+      "title": "Editorial"
+    }
+  ],
+  "items": [
+    {
+      "id": "i1",
+      "row": "r-dark",
+      "title": "Red Riding Hood",
+      "img": "gallery/red-riding-wolf.jpg",
+      "yaml": "task: dark_fantasy_portrait_red_riding\ndirective: \"RED RIDING HOOD AND THE WOLF — RAIN-SOAKED FOREST, CINEMATIC HALF-LENGTH PORTRAIT\"\n\ninstruction: >\n  Half-length portrait of a young woman in a red riding cape holding a grey wolf close to her\n  chest, both facing camera, caught in falling rain against a dark pine forest. Calm, steady,\n  unafraid — the wolf is hers, not a threat.\n\nsubject:\n  - Adult woman, mid twenties, Mediterranean features, dark hair in two tight dutch braids\n  - Real skin with visible pores, rain beading on the forehead and cheekbone, no retouching\n  - Small stud earrings, bare face, no glamour makeup\n\nwardrobe:\n  - Deep red velvet hooded cape with white lace trim, tied at the throat with a red ribbon\n  - White off-shoulder peasant blouse with lace cuffs, black corset bodice over it\n\nanimal:\n  - Adult grey wolf, thick winter coat, amber eyes to camera, ears up and relaxed\n  - Fur wet at the guard hairs, individual hair detail, no CGI smoothness\n\ncamera_gear:\n  - Shot on ARRI Alexa 35 with an 85mm prime at f/2.0, eye level, subject filling the frame\n\nlighting:\n  - Single large softbox front left, cool moonlight rim from behind right through the rain\n  - Deep open shadows, rain lit so each drop reads against the dark trees\n\ngrade: \"Desaturated cool green-grey forest, red cape held as the only saturated colour, filmic contrast\"\n\nnegative_prompt: \"plastic skin, airbrushed, beauty filter, cartoon wolf, CGI fur, dry hair in rain, changed identity, extra fingers, warped hands, oversaturated, low resolution\"\n",
+      "draft": false
+    },
+    {
+      "id": "i2",
+      "row": "r-dark",
+      "title": "Raven Shaman",
+      "img": "gallery/raven-shaman.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i3",
+      "row": "r-dark",
+      "title": "Raven Queen",
+      "img": "gallery/raven-queen.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i4",
+      "row": "r-macro",
+      "title": "Lava Eye",
+      "img": "gallery/lava-eye.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i5",
+      "row": "r-macro",
+      "title": "Tiger Eye",
+      "img": "gallery/tiger-eye.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i6",
+      "row": "r-crea",
+      "title": "Forest Nymph",
+      "img": "gallery/forest-nymph.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i7",
+      "row": "r-crea",
+      "title": "Raptors at Dawn",
+      "img": "gallery/raptors-beach.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i8",
+      "row": "r-edit",
+      "title": "Mirror Strength",
+      "img": "gallery/mirror-strength.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    },
+    {
+      "id": "i9",
+      "row": "r-edit",
+      "title": "After the Swim",
+      "img": "gallery/after-swim.jpg",
+      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
+      "draft": false
+    }
+  ]
+}
