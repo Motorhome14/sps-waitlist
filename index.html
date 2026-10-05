@@ -438,11 +438,236 @@ body.admin .gal-add{ display:flex; }
   .gal-card, .gal-add{ width:156px; }
 }
 
+/* ── Prompt: sub-campos dentro de cada sección ── */
+.pv-blocks .fld{ padding:2px 0; font-family:'JetBrains Mono',monospace; font-size:11.5px;
+  line-height:1.7; color:var(--text2); white-space:pre-wrap; word-break:break-word; }
+.pv-blocks .fld .k{ color:var(--amber3); font-weight:500; }
+.pv-blocks summary .cnt{ margin-left:6px; font-size:8.5px; color:var(--text3);
+  border:1px solid var(--border2); border-radius:6px; padding:1px 5px; }
+.pv-blocks .bd.neg li{ color:var(--text2); }
+.pv-blocks details .bd{ padding-top:4px; }
+.pv-blocks details > .fld:first-of-type{ margin-top:8px; }
+.pv-blocks details > .fld{ padding-left:13px; padding-right:13px; }
+.pv-blocks details > .fld:last-child{ padding-bottom:12px; }
+
+/* ── Botón de descarga del admin ── */
+.ad-bar #adDownload.hot{ background:linear-gradient(135deg,var(--amber2),var(--amber));
+  color:#120c05; border-color:var(--amber); }
+
+/* ══════════════════════════════════════════════════════════════════
+   VIDEOS — fila horizontal, mismo lenguaje que la galería
+   La miniatura sale de YouTube; el reproductor recién se crea al
+   tocar, así que la página no carga nada de YouTube hasta entonces.
+   ══════════════════════════════════════════════════════════════════ */
+.videos{ padding:0 0 100px; }
+.vid-head{ padding:0 24px; max-width:1120px; margin:0 auto 34px; }
+.vid-chan{ display:inline-flex; align-items:center; gap:7px; margin-top:6px;
+  font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:2px;
+  text-transform:uppercase; color:var(--text3); text-decoration:none;
+  border:1px solid var(--border2); border-radius:999px; padding:7px 15px; transition:all .2s; }
+.vid-chan:hover{ border-color:var(--amber); color:var(--amber3); }
+.vid-card{ position:relative; flex:0 0 auto; width:290px; scroll-snap-align:start;
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  background:var(--panel); cursor:pointer; padding:0; text-align:left; color:inherit;
+  font:inherit; display:block; transition:border-color .22s, box-shadow .22s, transform .22s; }
+.vid-card:hover, .vid-card:focus-visible{ border-color:rgba(200,120,32,.6);
+  box-shadow:0 0 0 1px rgba(200,120,32,.16), 0 12px 32px rgba(0,0,0,.6); transform:translateY(-3px); }
+.vid-card:focus-visible{ outline:2px solid var(--amber3); outline-offset:2px; }
+.vid-thumb{ position:relative; background:#080502; }
+.vid-thumb img{ width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+.vid-card.tall .vid-thumb img{ aspect-ratio:9/16; }
+.vid-card.tall{ width:190px; }
+.vid-play{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.vid-play span{ width:54px; height:54px; border-radius:50%;
+  background:rgba(14,11,8,.78); border:1px solid rgba(255,168,32,.5);
+  backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center;
+  color:var(--amber3); font-size:17px; padding-left:4px; transition:all .22s; }
+.vid-card:hover .vid-play span{ background:var(--amber); color:#120c05; border-color:var(--amber); transform:scale(1.08); }
+.vid-cap{ padding:10px 12px; border-top:1px solid var(--border); }
+.vid-cap b{ display:block; font-family:'DM Sans',sans-serif; font-size:12.5px; font-weight:500;
+  color:var(--text); line-height:1.4; }
+.vid-cap i{ font-style:normal; display:block; margin-top:3px; font-family:'JetBrains Mono',monospace;
+  font-size:9px; color:var(--text3); letter-spacing:.4px; }
+
+/* Reproductor */
+.vlb{ position:fixed; inset:0; z-index:75; background:rgba(4,2,0,.9); backdrop-filter:blur(5px);
+  display:none; align-items:center; justify-content:center; padding:16px; }
+.vlb.on{ display:flex; }
+.vlb-box{ width:100%; max-width:960px; }
+.vlb-box.tall{ max-width:420px; }
+.vlb-frame{ position:relative; width:100%; aspect-ratio:16/9; background:#000;
+  border:1px solid var(--border2); border-radius:12px; overflow:hidden; }
+.vlb-box.tall .vlb-frame{ aspect-ratio:9/16; }
+.vlb-frame iframe{ width:100%; height:100%; border:0; display:block; }
+.vlb-bar{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.vlb-bar b{ flex:1; min-width:0; font-family:'DM Sans',sans-serif; font-size:13px;
+  font-weight:500; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+
+/* ══ FICHAS CON IMAGEN (hover en PC · mantener pulsado en movil) ══ */
+/* 4:3 EXACTO — es la proporcion en la que se generan las imagenes, asi que
+   entran a sangre, sin recorte y sin franjas. Como son grid items, si algun
+   texto no cupiera la ficha creceria en vez de desbordarse. */
+.cardx { position:relative; overflow:hidden; aspect-ratio:4/3; }
+.cardx .cnum {
+  position:absolute; top:10px; right:12px; z-index:2;
+  font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1px;
+  color:var(--text3); opacity:.55; pointer-events:none;
+}
+.cardx-face { position:relative; z-index:1; transition:opacity .18s ease; }
+/* Ajustado para que el texto mas largo entre justo en el recuadro 4:3
+   cuando la ficha esta en su ancho minimo (318px). */
+.cardx { padding:18px 18px; }
+.cardx .fname { font-size:16px; margin-bottom:6px; line-height:1.15; }
+.cardx .fdesc { font-size:12.5px; line-height:1.58; }
+.cardx .fdesc b { color:var(--text); font-weight:600; }
+.cardx .fdesc i { font-style:italic; color:var(--text); opacity:.92; }
+.cardx .fdesc code {
+  font-family:'JetBrains Mono',monospace; font-size:.86em;
+  color:var(--ac,var(--amber)); background:rgba(255,255,255,.04);
+  border:1px solid var(--border); border-radius:3px; padding:0 4px;
+  white-space:nowrap;
+}
+.cardx-shot {
+  position:absolute; inset:0; z-index:3;
+  background-size:cover; background-position:center; background-repeat:no-repeat;
+  opacity:0; visibility:hidden; transition:opacity .22s ease;
+  border-radius:inherit;
+}
+.cardx-shot::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(0deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.08) 55%,transparent 100%);
+}
+.cardx-shot .shot-name {
+  position:absolute; left:14px; right:14px; bottom:12px; z-index:1;
+  font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:1.5px;
+  color:#fff; text-shadow:0 2px 10px rgba(0,0,0,.8);
+}
+/* solo las fichas que TIENEN imagen reaccionan */
+.cardx.has-shot { cursor:pointer; }
+.cardx.has-shot.show-shot .cardx-shot { opacity:1; visibility:visible; }
+.cardx.has-shot.show-shot .cardx-face { opacity:0; }
+@media (hover:hover) and (pointer:fine) {
+  .cardx.has-shot:hover .cardx-shot,
+  .cardx.has-shot:focus-visible .cardx-shot { opacity:1; visibility:visible; }
+  .cardx.has-shot:hover .cardx-face,
+  .cardx.has-shot:focus-visible .cardx-face { opacity:0; }
+}
+/* pista discreta de que la ficha tiene imagen */
+.cardx.has-shot::after {
+  content:''; position:absolute; bottom:10px; right:12px; z-index:2;
+  width:5px; height:5px; border-radius:50%; background:var(--ac,var(--amber));
+  box-shadow:0 0 6px var(--ac,var(--amber)); opacity:.8;
+}
+.cardx.has-shot.show-shot::after, .cardx.has-shot:hover::after { opacity:0; }
+/* boton admin por ficha */
+/* El "+ img" no debe empujar el texto (romperia el 4:3) ni taparlo: flota en
+   la esquina superior derecha y solo aparece al pasar el mouse por la ficha.
+   En pantallas tactiles no hay hover, asi que ahi queda siempre visible. */
+.cardx-add {
+  position:absolute; right:8px; top:8px; z-index:7;
+  font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.5px;
+  padding:4px 9px; border-radius:5px; cursor:pointer;
+  background:rgba(8,6,4,.92); color:var(--amber3);
+  border:1px solid rgba(200,120,32,.55);
+  opacity:0; transition:opacity .15s ease;
+}
+.cardx:hover .cardx-add, .cardx:focus-within .cardx-add { opacity:1; }
+.cardx-add:hover { background:var(--amber); color:#11100e; }
+@media (hover:none){ .cardx-add { opacity:1; } }
+body.is-admin .cardx:hover .cnum { opacity:0; }   /* el numero le deja el lugar */
+
+/* ══ ANCHO Y COLUMNAS DE LAS FICHAS ══
+   Solo .features y .grid, que ahora unicamente usan las dos secciones de
+   fichas. La galeria, los videos y el formulario siguen a 1120px. */
+#secTools, #secModules { max-width:1700px; padding-left:32px; padding-right:32px; }
+#secTools  .grid, #secModules .grid { grid-template-columns:repeat(5,1fr); gap:12px; }
+/* Los cortes estan calculados para que la ficha NUNCA baje de ~318px de ancho.
+   Con 4:3 eso da 238px de alto, que es lo que necesita el texto mas largo. */
+@media(max-width:1699px){ #secTools .grid, #secModules .grid { grid-template-columns:repeat(4,1fr); } }
+@media(max-width:1379px){ #secTools .grid, #secModules .grid { grid-template-columns:repeat(3,1fr); } }
+@media(max-width:1047px){ #secTools .grid, #secModules .grid { grid-template-columns:repeat(2,1fr); } }
+@media(max-width:715px) {
+  #secTools, #secModules { padding-left:16px; padding-right:16px; padding-top:64px; padding-bottom:64px; }
+  #secTools .grid, #secModules .grid { grid-template-columns:1fr; gap:10px; }
+  .cardx .fdesc { font-size:13.5px; }      /* un pelo mas grande para leer en mano */
+}
+/* telefonos angostos (iPhone SE y similares): la ficha baja a ~328px y el
+   cuerpo tiene que achicarse otra vez para seguir entrando en el 4:3 */
+@media(max-width:430px){
+  .cardx { padding:15px 15px; }
+  .cardx .fname { font-size:15px; }
+  .cardx .fdesc { font-size:12px; line-height:1.5; }
+}
+/* Por debajo de 346px (iPhone SE de 2016 y parecidos) ya no entra el texto en
+   4:3. Ahi gana el texto: la ficha crece y la imagen se recorta un poco. */
+@media(max-width:345px){ .cardx { aspect-ratio:auto; } }
+
+/* ══ BOTON DE IDIOMA ══ */
+.langbar {
+  position:fixed; top:14px; right:14px; z-index:90;
+  display:flex; align-items:center; gap:8px;
+  padding:6px 8px 6px 12px; border-radius:30px;
+  background:rgba(14,12,10,.92); border:1px solid rgba(200,120,32,.4);
+  backdrop-filter:blur(10px); box-shadow:0 6px 22px rgba(0,0,0,.5);
+}
+.langbar .lb-label {
+  font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--text3); white-space:nowrap;
+}
+.langbar button {
+  font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
+  letter-spacing:1px; padding:5px 12px; border-radius:20px; cursor:pointer;
+  background:transparent; color:var(--text2); border:1px solid transparent;
+  transition:all .15s ease;
+}
+.langbar button:hover { color:var(--amber3); }
+.langbar button.on {
+  background:linear-gradient(135deg,var(--amber),#ff6a00);
+  color:#11100e; border-color:transparent;
+  box-shadow:0 0 14px rgba(200,120,32,.45);
+}
+@media(max-width:560px){
+  .langbar { top:10px; right:10px; padding:5px 7px 5px 10px; gap:6px; }
+  .langbar .lb-label { display:none; }
+  .langbar button { padding:5px 11px; }
+  /* en el telefono tapaba el titulo de la ficha: se esconde al bajar
+     y vuelve apenas subis un poco */
+  .langbar { transition:transform .22s ease, opacity .22s ease; }
+  .langbar.lb-hide { transform:translateY(-130%); opacity:0; pointer-events:none; }
+}
+
+
+/* la barra de admin es fixed abajo: deja aire para no tapar el ultimo "+ img" */
+body.is-admin { padding-bottom:96px; }
+
+/* dialogo de encabezados a dos idiomas */
+.i18n-cols { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.i18n-head {
+  font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:2px;
+  text-transform:uppercase; color:var(--amber3); margin-bottom:10px;
+  padding-bottom:6px; border-bottom:1px solid var(--border);
+}
+.i18n-note {
+  font-family:'DM Sans',sans-serif; font-size:11.5px; color:var(--text3);
+  line-height:1.6; margin:-4px 0 16px;
+}
+.i18n-cols textarea::placeholder, .i18n-cols input::placeholder { color:var(--text3); opacity:.5; }
+#dlg { max-width:860px; }
+@media(max-width:760px){ .i18n-cols { grid-template-columns:1fr; gap:4px; } #dlg{ max-width:94vw; } }
 </style>
 </head>
 <body>
 
 <canvas id="bgCanvas"></canvas>
+
+<!-- ══ IDIOMA / LANGUAGE ══ -->
+<div class="langbar" id="langBar" role="group" aria-label="Idioma / Language">
+  <span class="lb-label">Idioma&nbsp;·&nbsp;Language</span>
+  <button type="button" id="lbES" data-lang="es">ES</button>
+  <button type="button" id="lbEN" data-lang="en">EN</button>
+</div>
+
 
 <!-- HERO -->
 <section class="hero">
@@ -560,130 +785,209 @@ body.admin .gal-add{ display:flex; }
 <!-- ══ BARRA DE ADMIN ══ -->
 <div class="ad-bar" id="adBar" style="display:none;">
   <span class="tag">Admin</span>
-  <input id="adTok" type="password" placeholder="Paste your GitHub token" autocomplete="off" spellcheck="false">
-  <span class="ad-msg" id="adMsg">The token stays in this tab only</span>
+  <button class="btn-s ghost" id="adLoadBtn">Load content.json</button>
+  <input type="file" id="adLoad" accept="application/json,.json" style="display:none">
+  <button class="btn-s" id="adDownload">Download update</button>
+  <button class="btn-s ghost" id="adWipe" title="Borra la copia guardada en este navegador">Empezar de cero</button>
+  <span id="adLocal" style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;">local —</span>
+  <span class="ad-msg" id="adMsg">Edit here, then Download update and upload it to GitHub</span>
+  <input id="adTok" type="password" placeholder="GitHub token (optional)" autocomplete="off" spellcheck="false"
+         style="max-width:230px;flex:0 1 230px;">
 </div>
 
-<!-- FEATURES — CORE MODULES -->
-<section class="features">
-  <div class="section-label">Core Systems</div>
-  <div class="section-title">A Full Creative Studio</div>
-  <div class="section-sub">Every module works together — structured libraries that combine into a single, precision prompt built the way a director of photography would think.</div>
+<!-- ══ VIDEOS ══ -->
+<section class="videos" id="videos">
+  <div class="vid-head">
+    <div class="section-label" id="vidLabel">On YouTube</div>
+    <div class="section-title" id="vidTitle">Watch it being built</div>
+    <div class="section-sub" id="vidSub"></div>
+    <div style="text-align:center;margin-top:-38px;margin-bottom:26px;">
+      <a class="vid-chan" id="vidChan" target="_blank" rel="noopener" style="display:none;">▶ Channel</a>
+      <button class="btn-s ad-only" id="adEditVid" style="margin-left:8px;">Edit heading</button>
+    </div>
+  </div>
+  <div id="vidRows"></div>
+</section>
 
+<!-- ══ REPRODUCTOR ══ -->
+<div class="vlb" id="vlb">
+  <div class="vlb-box" id="vlbBox">
+    <div class="vlb-bar">
+      <b id="vlbTitle"></b>
+      <button class="pv-x" id="vlbX" aria-label="Close">&#10005;</button>
+    </div>
+    <div class="vlb-frame" id="vlbFrame"></div>
+  </div>
+</div>
+
+<!-- FEATURES — TOOLS (18) -->
+<section class="features" id="secTools">
+  <div class="section-label" data-i18n="lbl.tools"></div>
+  <div class="section-title" data-i18n="ttl.tools"></div>
+  <div class="section-sub" data-i18n="sub.tools"></div>
   <div class="grid">
-
-    <div class="fcard fa">
-      <span class="ficon">🧠</span>
-      <div class="fname">Face Architect</div>
-      <p class="fdesc">17 arrays of facial parameters — heritage, face shape, skin tone, skin texture, eye shape, iris color, brows, nose, lips, jaw, cheekbones, forehead, neck, hair base, mustache, beard, sideburns. Generates a precise Identity Lock for your character.</p>
-      <span class="ftag">17 parameter arrays</span>
-    </div>
-
-    <div class="fcard fb">
-      <span class="ficon">🖼️</span>
-      <div class="fname">Face Gallery</div>
-      <p class="fdesc">Store any character with their Identity Lock and recall them in any session. Same face, different outfits, locations and styles — consistent across every generation.</p>
-      <span class="ftag">Character persistence</span>
-    </div>
-
-    <div class="fcard fc">
-      <span class="ficon">✨</span>
-      <div class="fname">Fantasy Skin — 35+ Materials</div>
-      <p class="fdesc">Biomechanical Giger lattice, neon plasma wrap, cracked porcelain, liquid oil skin, gold leaf deity, dark root alien, blood horror, charcoal dissolution, translucent anatomical, android circuits, painted art styles and more across 15 categories.</p>
-      <span class="ftag">15 categories · 35+ tiles</span>
-    </div>
-
-    <div class="fcard fd">
-      <span class="ficon">🎨</span>
-      <div class="fname">Body Paint Art</div>
-      <p class="fdesc">Full-coverage professional body paint photography. Ocean waves, cyberpunk circuits, bioluminescent forests, cosmic nebula, and more — applied from scalp to toes with master-level artistic detail.</p>
-      <span class="ftag">Full-body coverage</span>
-    </div>
-
-    <div class="fcard fe">
-      <span class="ficon">📷</span>
-      <div class="fname">Camera & Lens System</div>
-      <p class="fdesc">Canon R5, Leica M11, ARRI Alexa 35, Hasselblad X2D 100C, RED V-RAPTOR, Phase One XF IQ4 and more — each with full technical descriptors: color science, dynamic range, skin tone rendering, bokeh character.</p>
-      <span class="ftag">17 cameras · 12 lenses</span>
-    </div>
-
-    <div class="fcard fa">
-      <span class="ficon">💡</span>
-      <div class="fname">Lighting Library</div>
-      <p class="fdesc">Studio softbox, golden hour backlight, dramatic Rembrandt, cinematic neon rim, volumetric haze, chiaroscuro, blue hour mixed light, tungsten practicals, butterfly beauty — complete professional setups with time of day, weather and atmosphere controls.</p>
-      <span class="ftag">20+ lighting setups</span>
-    </div>
-
-    <div class="fcard fb">
-      <span class="ficon">📸</span>
-      <div class="fname">Photographer Styles</div>
-      <p class="fdesc">Annie Leibovitz, Mario Sorrenti, Tim Walker, Peter Lindbergh, Helmut Newton, Gregory Crewdson and many more. One selection redefines 70% of the image's look and feel.</p>
-      <span class="ftag">Real photographer aesthetics</span>
-    </div>
-
-    <div class="fcard fc">
-      <span class="ficon">👗</span>
-      <div class="fname">Clothing Library + Creations</div>
-      <p class="fdesc">Editorial fashion, cosplay, period costumes, streetwear, fantasy armor, western, swimwear and more. Clothing Creations lets you add your own outfits as custom tiles that go directly into the prompt.</p>
-      <span class="ftag">Custom tiles · Any style</span>
-    </div>
-
-    <div class="fcard fd">
-      <span class="ficon">💇</span>
-      <div class="fname">Hair Library + Creations</div>
-      <p class="fdesc">Detailed hair descriptors for men, women, children, creatures and fantasy beings. Includes fire hair, crystal strands, living roots, mermaid silk. Each tile describes texture, behavior, density, surface and character — not just a name.</p>
-      <span class="ftag">Fantasy · Realistic · Creature</span>
-    </div>
-
-    <div class="fcard fe">
-      <span class="ficon">🔬</span>
-      <div class="fname">Macro Library</div>
-      <p class="fdesc">Extreme close-up control for 8 anatomical targets: skin texture, eyes, lips, hair strand, nails, hands, eyelashes, pores. Intensity 0–4. For beauty, product shots and tactile detail.</p>
-      <span class="ftag">8 targets · 5 intensity levels</span>
-    </div>
-
-    <div class="fcard fa">
-      <span class="ficon">⚡</span>
-      <div class="fname">AI Director</div>
-      <p class="fdesc">Describe any idea in plain language and the AI Director constructs the full scene parameters — camera, lighting, location, atmosphere, composition — with cinematic precision. One description, complete prompt.</p>
-      <span class="ftag">Claude-powered</span>
-    </div>
-
-    <div class="fcard fb">
-      <span class="ficon">🎨</span>
-      <div class="fname">AI Creative</div>
-      <p class="fdesc">Upload any reference image — photograph, illustration, painting, screenshot — and the AI extracts its visual style to replicate in your prompt. Style transfer without manual reverse-engineering.</p>
-      <span class="ftag">Any reference image</span>
-    </div>
-
-    <div class="fcard fc">
-      <span class="ficon">🎬</span>
-      <div class="fname">Frame Director</div>
-      <p class="fdesc">Generate video prompts with shot type, camera movement, duration, action and atmosphere. Build complete storyboard sequences ready for Veo, Kling, Runway or Sora.</p>
-      <span class="ftag">Veo · Kling · Runway · Sora</span>
-    </div>
-
-    <div class="fcard fd">
-      <span class="ficon">🛠️</span>
-      <div class="fname">Skill & Tool Gallery</div>
-      <p class="fdesc">Your personal prompt library. Save reusable instruction blocks (skills) and custom HTML tools with your own image sets. Everything is portable, exportable, and yours across sessions.</p>
-      <span class="ftag">Personal · Exportable</span>
-    </div>
-
-    <div class="fcard fe">
-      <span class="ficon">📚</span>
-      <div class="fname">Prompt Gallery</div>
-      <p class="fdesc">Every prompt you generate is saved with a preview image. Revisit, copy, remix or build on any past creation. Smart dual-storage keeps text and images separate for maximum efficiency.</p>
-      <span class="ftag">Full history · Image preview</span>
-    </div>
-
-    <div class="fcard fa">
-      <span class="ficon">💾</span>
-      <div class="fname">UIConfig Export / Import</div>
-      <p class="fdesc">Export your entire studio — prompts, characters, custom creations, skills, presets — as a single portable JSON file. Take your setup to any device or share it with a team.</p>
-      <span class="ftag">Full backup · Cross-device</span>
-    </div>
-
+    <article class="fcard fa cardx" data-card="T1" tabindex="0">
+      <span class="cnum">T1</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T1.t">Face Reference Gallery</div>
+        <p class="fdesc" data-i18n="T1"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T1" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fb cardx" data-card="T2" tabindex="0">
+      <span class="cnum">T2</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T2.t">AI Face Analysis</div>
+        <p class="fdesc" data-i18n="T2"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T2" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fc cardx" data-card="T3" tabindex="0">
+      <span class="cnum">T3</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T3.t">AI Body Analysis</div>
+        <p class="fdesc" data-i18n="T3"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T3" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fd cardx" data-card="T4" tabindex="0">
+      <span class="cnum">T4</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T4.t">Body Advanced Profile Builder</div>
+        <p class="fdesc" data-i18n="T4"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T4" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fe cardx" data-card="T5" tabindex="0">
+      <span class="cnum">T5</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T5.t">Face Architect</div>
+        <p class="fdesc" data-i18n="T5"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T5" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fa cardx" data-card="T6" tabindex="0">
+      <span class="cnum">T6</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T6.t">Camera Pose Studio 3D</div>
+        <p class="fdesc" data-i18n="T6"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T6" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fb cardx" data-card="T7" tabindex="0">
+      <span class="cnum">T7</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T7.t">Alpha Pose Studio</div>
+        <p class="fdesc" data-i18n="T7"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T7" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fc cardx" data-card="T8" tabindex="0">
+      <span class="cnum">T8</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T8.t">Character Sheet Studio</div>
+        <p class="fdesc" data-i18n="T8"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T8" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fd cardx" data-card="T9" tabindex="0">
+      <span class="cnum">T9</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T9.t">Los 11 estudios de análisis con API</div>
+        <p class="fdesc" data-i18n="T9"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T9" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fe cardx" data-card="T10" tabindex="0">
+      <span class="cnum">T10</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T10.t">Upscaler Studio</div>
+        <p class="fdesc" data-i18n="T10"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T10" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fa cardx" data-card="T11" tabindex="0">
+      <span class="cnum">T11</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T11.t">Halftone Studio</div>
+        <p class="fdesc" data-i18n="T11"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T11" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fb cardx" data-card="T12" tabindex="0">
+      <span class="cnum">T12</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T12.t">Prompt Node Studio</div>
+        <p class="fdesc" data-i18n="T12"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T12" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fc cardx" data-card="T13" tabindex="0">
+      <span class="cnum">T13</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T13.t">Simone Studio</div>
+        <p class="fdesc" data-i18n="T13"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T13" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fd cardx" data-card="T14" tabindex="0">
+      <span class="cnum">T14</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T14.t">AI Director · AI Creative · Video Sequence</div>
+        <p class="fdesc" data-i18n="T14"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T14" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fe cardx" data-card="T15" tabindex="0">
+      <span class="cnum">T15</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T15.t">Skill & Tool Gallery + Action Picker</div>
+        <p class="fdesc" data-i18n="T15"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T15" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fa cardx" data-card="T16" tabindex="0">
+      <span class="cnum">T16</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T16.t">Prompt Gallery · My Favorites · My Creations</div>
+        <p class="fdesc" data-i18n="T16"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T16" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fb cardx" data-card="T17" tabindex="0">
+      <span class="cnum">T17</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T17.t">Macro Detail Studio</div>
+        <p class="fdesc" data-i18n="T17"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T17" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fc cardx" data-card="T18" tabindex="0">
+      <span class="cnum">T18</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="T18.t">Control del proyecto</div>
+        <p class="fdesc" data-i18n="T18"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="T18" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
   </div>
 </section>
 
@@ -713,125 +1017,228 @@ body.admin .gal-add{ display:flex; }
   </div>
 </div>
 
-<!-- GENRES -->
-<section class="genres">
-  <div class="section-label">Creative Range</div>
-  <div class="section-title">Every Visual Genre</div>
-  <div class="section-sub">SPS is not a photography tool — it covers every creative direction from hyperrealistic portraits to animated transformations, body horror and fine art.</div>
-
-  <div class="genre-grid">
-    <div class="gcard">
-      <span class="gicon">📸</span>
-      <div class="ginfo">
-        <div class="gtitle">Realistic Photography</div>
-        <div class="gdesc">Portrait, beauty, editorial fashion, macro, wildlife, product</div>
+<!-- MODULES — PROMPT ANATOMY (24) -->
+<section class="features" id="secModules">
+  <div class="section-label" data-i18n="lbl.mod"></div>
+  <div class="section-title" data-i18n="ttl.mod"></div>
+  <div class="section-sub" data-i18n="sub.mod"></div>
+  <div class="grid">
+    <article class="fcard fa cardx" data-card="M1" tabindex="0">
+      <span class="cnum">M1</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M1.t">Photography preset</div>
+        <p class="fdesc" data-i18n="M1"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🦸</span>
-      <div class="ginfo">
-        <div class="gtitle">Superhero & Villain</div>
-        <div class="gdesc">Archetype-specific body builds — Spider-Man, Thor, Poison Ivy and more</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M1" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fb cardx" data-card="M2" tabindex="0">
+      <span class="cnum">M2</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M2.t">Primary subject</div>
+        <p class="fdesc" data-i18n="M2"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🎨</span>
-      <div class="ginfo">
-        <div class="gtitle">Body Paint Art</div>
-        <div class="gdesc">Full-coverage professional body paint, multiple themes and patterns</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M2" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fc cardx" data-card="M3" tabindex="0">
+      <span class="cnum">M3</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M3.t">Body consistency instructions</div>
+        <p class="fdesc" data-i18n="M3"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🐉</span>
-      <div class="ginfo">
-        <div class="gtitle">Fantasy Skin</div>
-        <div class="gdesc">35+ skin material transformations across 15 categories</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M3" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fd cardx" data-card="M4" tabindex="0">
+      <span class="cnum">M4</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M4.t">Facial expression + Pose</div>
+        <p class="fdesc" data-i18n="M4"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🖌️</span>
-      <div class="ginfo">
-        <div class="gtitle">Fine Art Masters</div>
-        <div class="gdesc">Rembrandt, Schiele, Caravaggio, Waterhouse, Klimt, Degas</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M4" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fe cardx" data-card="M5" tabindex="0">
+      <span class="cnum">M5</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M5.t">Subject action</div>
+        <p class="fdesc" data-i18n="M5"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🎌</span>
-      <div class="ginfo">
-        <div class="gtitle">Anime Styles</div>
-        <div class="gdesc">Demon Slayer, Naruto, JoJo's, Ghost in the Shell, Dragon Ball</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M5" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fa cardx" data-card="M6" tabindex="0">
+      <span class="cnum">M6</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M6.t">Hairstyle</div>
+        <p class="fdesc" data-i18n="M6"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🧱</span>
-      <div class="ginfo">
-        <div class="gtitle">Cartoon & Toy</div>
-        <div class="gdesc">LEGO minifigure, G.I. Joe, SilverHawks, He-Man, Disney, Pixar</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M6" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fb cardx" data-card="M7" tabindex="0">
+      <span class="cnum">M7</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M7.t">Wardrobe</div>
+        <p class="fdesc" data-i18n="M7"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🌊</span>
-      <div class="ginfo">
-        <div class="gtitle">Dark Fantasy & Horror</div>
-        <div class="gdesc">Surrealismo oscuro, body horror, criaturas, gothic world</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M7" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fc cardx" data-card="M8" tabindex="0">
+      <span class="cnum">M8</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M8.t">Makeup style + Lip color</div>
+        <p class="fdesc" data-i18n="M8"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🤖</span>
-      <div class="ginfo">
-        <div class="gtitle">Sci-Fi & Cyberpunk</div>
-        <div class="gdesc">Android, concept art de producción, space opera, mech</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M8" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fd cardx" data-card="M9" tabindex="0">
+      <span class="cnum">M9</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M9.t">Fantasy skin material</div>
+        <p class="fdesc" data-i18n="M9"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🧬</span>
-      <div class="ginfo">
-        <div class="gtitle">Biomechanical</div>
-        <div class="gdesc">Giger aesthetic, wet biomech, bone lattice, vascular structures</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M9" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fe cardx" data-card="M10" tabindex="0">
+      <span class="cnum">M10</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M10.t">Accessories & props</div>
+        <p class="fdesc" data-i18n="M10"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🏎</span>
-      <div class="ginfo">
-        <div class="gtitle">Cars Editorial</div>
-        <div class="gdesc">DeLorean, Batmobile, Knight Rider, DB5, Fast & Furious Supra</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M10" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fa cardx" data-card="M11" tabindex="0">
+      <span class="cnum">M11</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M11.t">Vehicle in scene</div>
+        <p class="fdesc" data-i18n="M11"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🐾</span>
-      <div class="ginfo">
-        <div class="gtitle">Animals & Pets</div>
-        <div class="gdesc">Breeds, coats, fantasy skin applied to animals, creature portraits</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M11" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fb cardx" data-card="M12" tabindex="0">
+      <span class="cnum">M12</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M12.t">Environment</div>
+        <p class="fdesc" data-i18n="M12"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🏟</span>
-      <div class="ginfo">
-        <div class="gtitle">Fight Posters</div>
-        <div class="gdesc">Indie wrestling, Mexican lucha, diamond light rays, illustrated styles</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M12" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fc cardx" data-card="M13" tabindex="0">
+      <span class="cnum">M13</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M13.t">Lighting setup + Light behavior</div>
+        <p class="fdesc" data-i18n="M13"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🤰</span>
-      <div class="ginfo">
-        <div class="gtitle">Maternity</div>
-        <div class="gdesc">Body paint and portrait profiles for maternity photography</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M13" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fd cardx" data-card="M14" tabindex="0">
+      <span class="cnum">M14</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M14.t">Camera Angle + Composition + Framing</div>
+        <p class="fdesc" data-i18n="M14"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🎭</span>
-      <div class="ginfo">
-        <div class="gtitle">Cosplay & Character</div>
-        <div class="gdesc">Character builds, costume libraries, identity-locked personas</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M14" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fe cardx" data-card="M15" tabindex="0">
+      <span class="cnum">M15</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M15.t">Mood</div>
+        <p class="fdesc" data-i18n="M15"></p>
       </div>
-    </div>
-    <div class="gcard">
-      <span class="gicon">🎬</span>
-      <div class="ginfo">
-        <div class="gtitle">Video & Storyboard</div>
-        <div class="gdesc">Frame sequences, shot types, camera moves for AI video generators</div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M15" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fa cardx" data-card="M16" tabindex="0">
+      <span class="cnum">M16</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M16.t">Capture characteristics</div>
+        <p class="fdesc" data-i18n="M16"></p>
       </div>
-    </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M16" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fb cardx" data-card="M17" tabindex="0">
+      <span class="cnum">M17</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M17.t">Color science + Visual direction</div>
+        <p class="fdesc" data-i18n="M17"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M17" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fc cardx" data-card="M18" tabindex="0">
+      <span class="cnum">M18</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M18.t">Scene detail</div>
+        <p class="fdesc" data-i18n="M18"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M18" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fd cardx" data-card="M19" tabindex="0">
+      <span class="cnum">M19</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M19.t">Consistency + Identity lock</div>
+        <p class="fdesc" data-i18n="M19"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M19" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fe cardx" data-card="M20" tabindex="0">
+      <span class="cnum">M20</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M20.t">Reference notes + Skin detail</div>
+        <p class="fdesc" data-i18n="M20"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M20" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fa cardx" data-card="M21" tabindex="0">
+      <span class="cnum">M21</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M21.t">Realism mode</div>
+        <p class="fdesc" data-i18n="M21"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M21" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fb cardx" data-card="M22" tabindex="0">
+      <span class="cnum">M22</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M22.t">Quality target + Output goal</div>
+        <p class="fdesc" data-i18n="M22"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M22" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fc cardx" data-card="M23" tabindex="0">
+      <span class="cnum">M23</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M23.t">Output specifications</div>
+        <p class="fdesc" data-i18n="M23"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M23" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
+    <article class="fcard fd cardx" data-card="M24" tabindex="0">
+      <span class="cnum">M24</span>
+      <div class="cardx-face">
+        <div class="fname" data-i18n="M24.t">Negative prompt</div>
+        <p class="fdesc" data-i18n="M24"></p>
+      </div>
+      <div class="cardx-shot" aria-hidden="true"></div>
+      <button class="cardx-add ad-only" data-addimg="M24" type="button" title="Imagen de esta ficha">+ img</button>
+    </article>
   </div>
 </section>
 
@@ -1006,15 +1413,16 @@ async function handleSubmit() {
 
 <script>
 /* ══════════════════════════════════════════════════════════════════
-   PROMPT GALLERY  +  MODO ADMIN
+   PROMPT GALLERY  +  MODO ADMIN  (edición local + exportar)
    ------------------------------------------------------------------
-   · Todo el contenido vive en content.json (encabezado + piezas).
-     Una sola fila horizontal; el orden es el del archivo.
-   · El modo admin se abre con  ?admin  o  #admin  y se activa pegando
-     un token de GitHub. El token queda SOLO en esta pestaña; nunca se
-     guarda en el repo ni sobrevive al cierre del navegador.
-   · Cada cambio se comitea al repo al momento. Las imágenes se achican
-     en el navegador antes de subirlas.
+   · El contenido vive en content.json (encabezado + piezas + videos).
+   · MODO EXPORTAR (por defecto): entrás con ?admin, editás sobre el
+     archivo local, y "Download update" te baja un .zip con el
+     content.json y las imágenes nuevas para subir a GitHub. Sin token.
+   · MODO GITHUB (opcional): si pegás un token, cada cambio se comitea
+     al repo al momento — útil para un retoque rápido desde el celular.
+   · El prompt se muestra dividido en las secciones de SPS; el botón
+     Copy entrega SIEMPRE el texto original tal cual, sin tocar.
    ══════════════════════════════════════════════════════════════════ */
 (function(){
 'use strict';
@@ -1023,90 +1431,37 @@ var REPO   = { owner:'motorhome14', name:'sps-waitlist', branch:'main' };
 var IMGDIR = 'gallery/';
 var DATA   = 'content.json';
 
-/* Copia de arranque. Se usa cuando content.json no se puede leer:
-   al abrir el archivo con doble clic (file:// bloquea leer datos) o si
-   todavía no lo subiste. Una vez que el sitio corre en GitHub Pages,
-   content.json manda siempre y esta copia no se usa nunca. */
+/* Copia de arranque. Se usa cuando content.json no se puede leer (al
+   abrir el archivo con doble clic; file:// bloquea leer datos). Para
+   seguir desde tus últimos cambios, usá "Load content.json". */
+/* Punto de partida: SIN piezas. La pagina arranca vacia y lo que
+   agregues se guarda en el navegador (ver LS mas abajo). */
 var FALLBACK = {
   "head": {
     "label": "Prompt Gallery",
     "title": "Made in SPS",
     "sub": "Every image here was built by choosing from the studio's libraries — camera, lighting, skin, wardrobe, pose, location — and SPS assembled the prompt from those choices. What you see is exactly what it produced. Open one and take it."
   },
-  "items": [
-    {
-      "id": "i1",
-      "title": "Red Riding Hood",
-      "img": "gallery/red-riding-wolf.jpg",
-      "yaml": "task: dark_fantasy_portrait_red_riding\ndirective: \"RED RIDING HOOD AND THE WOLF — RAIN-SOAKED FOREST, CINEMATIC HALF-LENGTH PORTRAIT\"\n\ninstruction: >\n  Half-length portrait of a young woman in a red riding cape holding a grey wolf close to her\n  chest, both facing camera, caught in falling rain against a dark pine forest. Calm, steady,\n  unafraid — the wolf is hers, not a threat.\n\nsubject:\n  - Adult woman, mid twenties, Mediterranean features, dark hair in two tight dutch braids\n  - Real skin with visible pores, rain beading on the forehead and cheekbone, no retouching\n  - Small stud earrings, bare face, no glamour makeup\n\nwardrobe:\n  - Deep red velvet hooded cape with white lace trim, tied at the throat with a red ribbon\n  - White off-shoulder peasant blouse with lace cuffs, black corset bodice over it\n\nanimal:\n  - Adult grey wolf, thick winter coat, amber eyes to camera, ears up and relaxed\n  - Fur wet at the guard hairs, individual hair detail, no CGI smoothness\n\ncamera_gear:\n  - Shot on ARRI Alexa 35 with an 85mm prime at f/2.0, eye level, subject filling the frame\n\nlighting:\n  - Single large softbox front left, cool moonlight rim from behind right through the rain\n  - Deep open shadows, rain lit so each drop reads against the dark trees\n\ngrade: \"Desaturated cool green-grey forest, red cape held as the only saturated colour, filmic contrast\"\n\nnegative_prompt: \"plastic skin, airbrushed, beauty filter, cartoon wolf, CGI fur, dry hair in rain, changed identity, extra fingers, warped hands, oversaturated, low resolution\"\n",
-      "draft": false
-    },
-    {
-      "id": "i2",
-      "title": "Raven Shaman",
-      "img": "gallery/raven-shaman.jpg",
-      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
-      "draft": false
-    },
-    {
-      "id": "i3",
-      "title": "Raven Queen",
-      "img": "gallery/raven-queen.jpg",
-      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
-      "draft": false
-    },
-    {
-      "id": "i4",
-      "title": "Lava Eye",
-      "img": "gallery/lava-eye.jpg",
-      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
-      "draft": false
-    },
-    {
-      "id": "i5",
-      "title": "Tiger Eye",
-      "img": "gallery/tiger-eye.jpg",
-      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
-      "draft": false
-    },
-    {
-      "id": "i6",
-      "title": "Forest Nymph",
-      "img": "gallery/forest-nymph.jpg",
-      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
-      "draft": false
-    },
-    {
-      "id": "i7",
-      "title": "Raptors at Dawn",
-      "img": "gallery/raptors-beach.jpg",
-      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
-      "draft": false
-    },
-    {
-      "id": "i8",
-      "title": "Mirror Strength",
-      "img": "gallery/mirror-strength.jpg",
-      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
-      "draft": false
-    },
-    {
-      "id": "i9",
-      "title": "After the Swim",
-      "img": "gallery/after-swim.jpg",
-      "yaml": "note: \"Pegá acá el YAML real de este prompt desde el modo admin.\"\n",
-      "draft": false
-    }
-  ]
+  "items": [],
+  "vhead": {
+    "label": "On YouTube",
+    "title": "Watch it being built",
+    "sub": "Full runs from a blank studio to the finished image — every library, every choice, nothing cut.",
+    "channel": "",
+    "channelLabel": "Channel"
+  },
+  "videos": []
 };
 var usingSeed = false;
 
-var C = null;          // contenido vivo
-var TOKEN = '';        // token de GitHub, solo en memoria de la pestaña
-var SHA = null;        // sha actual de content.json, para poder actualizarlo
-var view = 'blocks';   // blocks | raw
+var C = null;
+var TOKEN = '';
+var view = 'blocks';
 var openItem = null;
 var wantAdmin = false;
+var pendingImages = {};      // path -> Blob  (imágenes nuevas de esta sesión)
+var blobURLs = {};           // path -> objectURL para previsualizar sin subir
+var dirty = false;
 
 var $  = function(id){ return document.getElementById(id); };
 var el = function(t, cls, html){ var n=document.createElement(t); if(cls)n.className=cls;
@@ -1114,57 +1469,164 @@ var el = function(t, cls, html){ var n=document.createElement(t); if(cls)n.class
 var esc = function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
 var uid = function(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); };
+var imgSrc = function(path){ return blobURLs[path] || path; };
 
-/* ── 1. Lector de YAML ────────────────────────────────────────────
-   Hecho a la medida de la forma que usa SPS: claves de primer nivel,
-   textos sueltos, bloques con > o |, y listas con guion.
-   NO es un parser de YAML completo y no pretende serlo.             */
-function parseYAML(src){
-  var lines = String(src||'').replace(/\r/g,'').split('\n');
-  var out = [], cur = null, mode = null;
-  function unq(s){ return s.replace(/^["']|["']$/g,'').trim(); }
-  function pretty(k){
-    var small = {and:1, or:1, of:1, the:1, a:1, an:1, to:1, in:1, on:1, for:1, with:1};
-    return k.split('_').map(function(w,i){
-      return (i>0 && small[w.toLowerCase()]) ? w.toLowerCase()
-           : w.charAt(0).toUpperCase() + w.slice(1);
-    }).join(' ');
+/* ══════════════════════════════════════════════════════════════════
+   1. Divisor del prompt de SPS
+      El prompt es un texto corrido con marcadores tipo "Pose:",
+      "BODY ANALYSIS:", etc. Cortamos en las SECCIONES de SPS (en
+      orden); los sub-campos quedan adentro de su sección. El
+      negative_prompt sale como bloque aparte. Cobertura 100%: nada
+      se pierde, y Copy entrega el original intacto.
+   ══════════════════════════════════════════════════════════════════ */
+var SECTION_STARTS = [
+ ['primary subject',               'Subject & Base Skin'],
+ ['face reference',                'Face Identity Lock'],
+ ['body analysis',                 'Body Analysis'],
+ ['facial expression',             'Facial Expression'],
+ ['pose',                          'Pose'],
+ ['hairstyle',                     'Hairstyle'],
+ ['wardrobe',                      'Wardrobe'],
+ ['garment + skin material unity', 'Garment + Skin Unity'],
+ ['eye transformation',            'Eyes'],
+ ['fantasy skin material',         'Fantasy Skin'],
+ ['accessory / prop detail',       'Accessory & Props'],
+ ['environment',                   'Environment'],
+ ['camera angle',                  'Camera & Lens']
+];
+var SS_MAP = {}; SECTION_STARTS.forEach(function(s){ SS_MAP[s[0]] = s[1]; });
+// también estas abren sección propia
+[['output specifications','Output']].forEach(function(s){ SS_MAP[s[0]] = s[1]; });
+
+function fieldsOf(text){
+  var RE = /(?:^|(?<=[.\n])\s*)([A-Za-z][A-Za-z0-9 \/+&'-]{1,44}?)\s*(?::|—\s)\s*/g;
+  var out = [], m;
+  while ((m = RE.exec(text)) !== null){
+    var t = m[1].trim();
+    if (t.split(' ').length > 5) continue;
+    out.push({ i:m.index + m[0].indexOf(t), t:t, end:m.index + m[0].length });
   }
-  for (var i=0;i<lines.length;i++){
-    var raw = lines[i], line = raw.trim();
-    if (line.charAt(0) === '#') continue;
-    var m = raw.match(/^([A-Za-z0-9_\-]+):\s*(.*)$/);
-    if (m){
-      cur = { label:pretty(m[1]), items:[], text:'' };
-      out.push(cur);
-      var v = m[2].trim();
-      if (v === '>' || v === '|' || v === '>-' || v === '|-'){ mode = 'block'; }
-      else if (v){ cur.text = unq(v); mode = null; }
-      else { mode = 'auto'; }
-      continue;
-    }
-    if (!cur || !line) continue;
-    if (line.indexOf('- ') === 0){ cur.items.push(unq(line.slice(2))); mode = 'list'; continue; }
-    if (mode === 'block' || mode === 'auto'){ cur.text += (cur.text ? ' ' : '') + line; }
-  }
-  return out.filter(function(b){ return b.text || b.items.length; });
+  return out.map(function(f,k){
+    var stop = (k+1 < out.length) ? out[k+1].i : text.length;
+    return { label:f.t, body:text.slice(f.end, stop).trim() };
+  });
+}
+function stripWrapper(s){
+  return String(s||'').replace(/^\s*template\s*:\s*[|>]?[-+]?\s*\n?/i, '');
+}
+function parseNegList(s){
+  s = String(s||'').trim();
+  if (!s) return [];
+  if (/(^|\n)\s*-\s+/.test(s))
+    return s.split('\n').map(function(l){ return l.replace(/^\s*-\s+/,'').trim(); }).filter(Boolean);
+  return s.split(/[,\n]/).map(function(x){ return x.trim(); }).filter(Boolean);
+}
+function splitNegative(raw){
+  var text = String(raw||'');
+  var low = text.toLowerCase(), pos = -1, klen = 0;
+  ['negative_prompt','negative prompt'].forEach(function(k){
+    var i = low.indexOf(k); if (i>=0 && (pos<0 || i<pos)){ pos=i; klen=k.length; }
+  });
+  if (pos < 0) return { main:text, negative:null };
+  var after = text.slice(pos+klen).replace(/^\s*:?\s*/,'');
+  return { main:text.slice(0,pos), negative:parseNegList(after) };
+}
+function parsePrompt(raw){
+  var sn = splitNegative(raw);
+  var main = stripWrapper(sn.main);
+  var fs_ = fieldsOf(main), secs = [], cur = null;
+  fs_.forEach(function(f){
+    var title = SS_MAP[f.label.toLowerCase()];
+    if (title){ cur = { label:title, fields:[] }; secs.push(cur); }
+    if (!cur){ cur = { label:'Prompt', fields:[] }; secs.push(cur); }
+    cur.fields.push(f);
+  });
+  return { sections:secs, negative:sn.negative };
+}
+function flatText(raw){
+  var p = parsePrompt(raw), s = p.sections.map(function(sec){
+    return sec.fields.map(function(f){ return f.label + ' ' + f.body; }).join(' ');
+  }).join(' ');
+  if (p.negative) s += ' ' + p.negative.join(' ');
+  return s.trim();
 }
 
-/* ── 2. Dibujar la galería ───────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   2. Galería
+   ══════════════════════════════════════════════════════════════════ */
 function visible(){
   var admin = document.body.classList.contains('admin');
   return C.items.filter(function(it){ return admin || !it.draft; });
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   Encabezados bilingues
+   Los campos label/title/sub de content.json son el INGLES. El español
+   va en label_es/title_es/sub_es. Si no esta cargado, se usan estos
+   textos por defecto, para que la pagina funcione en los dos idiomas
+   sin tener que editar nada.
+   ══════════════════════════════════════════════════════════════════ */
+var HEAD_ES = {
+  label: 'Galería de prompts',
+  title: 'Hecho en SPS',
+  sub:   'Entrá en cualquier imagen y vas a ver el prompt completo con toda su '
+       + 'estructura. Copialo tal cual: funciona en cualquier motor que acepte más de '
+       + '5.000 caracteres. Si lo querés aplicar a una persona real, solo agregás una '
+       + 'foto de referencia de cara y una de cuerpo.'
+};
+var HEAD_EN = {
+  label: 'Prompt Gallery',
+  title: 'Made in SPS',
+  sub:   "Open any image and you'll see the full prompt with its whole structure. Copy "
+       + 'it as it is — it works in any engine that takes more than 5,000 characters. '
+       + 'To use it on a real person, all you add is one face reference and one body '
+       + 'reference.'
+};
+/* Textos que escribio una version anterior de la pagina. Si el content.json
+   publicado todavia trae uno de estos, se trata como vacio y entra el texto
+   nuevo de arriba — asi no hay que editar ni re-subir el content.json. */
+var LEGACY = [
+  "Every image here was built by choosing from the studio's libraries — camera, lighting, "
+  + "skin, wardrobe, pose, location — and SPS assembled the prompt from those choices. "
+  + "What you see is exactly what it produced. Open one and take it."
+];
+var VHEAD_EN = {
+  label: 'On YouTube',
+  title: 'Watch it being built',
+  sub:   'Full runs from a blank studio to the finished image — every library, every '
+       + 'choice, nothing cut.',
+  channelLabel: 'Channel'
+};
+var VHEAD_ES = {
+  label: 'En YouTube',
+  title: 'Mirá cómo se construye',
+  sub:   'Procesos completos desde el studio en blanco hasta la imagen final — cada '
+       + 'librería, cada elección, sin cortes.',
+  channelLabel: 'Canal'
+};
+function curLang(){ return (typeof window.spsLang === 'function') ? window.spsLang() : 'en'; }
+function fresh(v){
+  v = (v || '').trim();
+  return LEGACY.indexOf(v) >= 0 ? '' : v;   // un texto viejo cuenta como vacio
+}
+/* Devuelve el texto del idioma activo: el cargado, si no el por defecto. */
+function tx(obj, key, defsEs, defsEn, fallback){
+  obj = obj || {};
+  var en = fresh(obj[key]);
+  if (curLang() === 'es')
+    return fresh(obj[key + '_es']) || (defsEs && defsEs[key]) || en || fallback || '';
+  return en || (defsEn && defsEn[key]) || fallback || '';
+}
+
 function render(){
+  if (window.paintCards) window.paintCards();   // fichas: repintar al recargar C
   var h = C.head || {};
-  $('galLabel').textContent = h.label || 'Prompt Gallery';
-  $('galTitle').textContent = h.title || 'Made in SPS';
-  $('galSub').textContent   = h.sub   || '';
+  $('galLabel').textContent = tx(h, 'label', HEAD_ES, HEAD_EN, '');
+  $('galTitle').textContent = tx(h, 'title', HEAD_ES, HEAD_EN, '');
+  $('galSub').textContent   = tx(h, 'sub',   HEAD_ES, HEAD_EN, '');
 
   var box = $('galRows'); box.innerHTML = '';
   var list = visible();
-
   var wrap = el('div','gal-railwrap');
   var rail = el('div','gal-rail');
   list.forEach(function(it){ rail.appendChild(card(it)); });
@@ -1172,36 +1634,175 @@ function render(){
   add.onclick = function(){ dlgItem(null); };
   rail.appendChild(add);
   wrap.appendChild(rail);
-
-  [['l','\u2039',-1],['r','\u203A',1]].forEach(function(a){
+  [['l','‹',-1],['r','›',1]].forEach(function(a){
     var b = el('button','gal-arrow '+a[0], a[1]);
     b.onclick = function(){ rail.scrollBy({ left: a[2]*rail.clientWidth*0.82, behavior:'smooth' }); };
     wrap.appendChild(b);
   });
   box.appendChild(wrap);
-
   if (!list.length && !document.body.classList.contains('admin'))
     box.appendChild(el('div','gal-empty','Nothing here yet.'));
+  renderVideos();
 }
-
 function card(it){
   var b = el('button','gal-card');
-  var blocks = parseYAML(it.yaml);
-  var flat = blocks.map(function(x){ return x.items.length ? x.items.join(' ') : x.text; }).join(' ');
+  var flat = flatText(it.yaml);
   b.innerHTML =
     (it.draft ? '<span class="gal-draft">Draft</span>' : '') +
-    '<img src="' + esc(it.img) + '" alt="' + esc(it.title) + '" loading="lazy">' +
+    '<img src="' + esc(imgSrc(it.img)) + '" alt="' + esc(it.title) + '" loading="lazy">' +
     '<div class="gal-peek"><em>Prompt</em><p>' + esc(flat.slice(0,180)) + '…</p></div>' +
     '<div class="gal-cap"><b>' + esc(it.title) + '</b><i>' + (it.yaml ? it.yaml.length + ' chars' : 'no prompt') + '</i></div>';
   b.onclick = function(){ openPanel(it); };
   return b;
 }
 
-/* ── 3. Panel del prompt ─────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   3. Videos de YouTube (la miniatura sale del ID; el player al tocar)
+   ══════════════════════════════════════════════════════════════════ */
+function ytid(url){
+  var u = String(url||'').trim();
+  if (/^[\w-]{11}$/.test(u)) return u;
+  var m = u.match(/(?:v=|\/shorts\/|youtu\.be\/|\/embed\/|\/live\/)([\w-]{11})/);
+  return m ? m[1] : '';
+}
+function isShort(url){ return /\/shorts\//.test(String(url||'')); }
+function renderVideos(){
+  var h = C.vhead || {};
+  $('vidLabel').textContent = tx(h, 'label', VHEAD_ES, VHEAD_EN, 'On YouTube');
+  $('vidTitle').textContent = tx(h, 'title', VHEAD_ES, VHEAD_EN, 'Watch it being built');
+  $('vidSub').textContent   = tx(h, 'sub',   VHEAD_ES, VHEAD_EN, '');
+  var ch = $('vidChan');
+  if (h.channel){ ch.href = h.channel; ch.style.display = 'inline-flex';
+                  ch.textContent = '▶ ' + tx(h, 'channelLabel', VHEAD_ES, VHEAD_EN, 'Channel'); }
+  else ch.style.display = 'none';
+  var admin = document.body.classList.contains('admin');
+  var list  = (C.videos || []).filter(function(v){ return admin || !v.draft; });
+  $('videos').style.display = (list.length || admin) ? '' : 'none';
+  var box = $('vidRows'); box.innerHTML = '';
+  var wrap = el('div','gal-railwrap');
+  var rail = el('div','gal-rail');
+  list.forEach(function(v){ rail.appendChild(vidCard(v)); });
+  var add = el('button','gal-add','<i>+</i>Add video');
+  add.onclick = function(){ dlgVideo(null); };
+  rail.appendChild(add);
+  wrap.appendChild(rail);
+  [['l','‹',-1],['r','›',1]].forEach(function(a){
+    var b = el('button','gal-arrow '+a[0], a[1]);
+    b.onclick = function(){ rail.scrollBy({ left:a[2]*rail.clientWidth*0.82, behavior:'smooth' }); };
+    wrap.appendChild(b);
+  });
+  box.appendChild(wrap);
+}
+function vidCard(v){
+  var b = el('button','vid-card' + (v.tall ? ' tall' : ''));
+  var hq  = 'https://i.ytimg.com/vi/' + v.yt + '/hqdefault.jpg';
+  var max = 'https://i.ytimg.com/vi/' + v.yt + '/maxresdefault.jpg';
+  b.innerHTML =
+    (v.draft ? '<span class="gal-draft">Draft</span>' : '') +
+    '<div class="vid-thumb"><img src="' + max + '" alt="' + esc(v.title) + '" loading="lazy" ' +
+      'onerror="this.onerror=null;this.src=\'' + hq + '\'">' +
+      '<span class="vid-play"><span>▶</span></span></div>' +
+    '<div class="vid-cap"><b>' + esc(v.title) + '</b>' +
+      (v.note ? '<i>' + esc(v.note) + '</i>' : '') + '</div>';
+  b.onclick = function(){ playVideo(v); };
+  return b;
+}
+function playVideo(v){
+  $('vlbTitle').textContent = v.title || '';
+  $('vlbBox').className = 'vlb-box' + (v.tall ? ' tall' : '');
+  $('vlbFrame').innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + v.yt +
+    '?autoplay=1&rel=0" title="' + esc(v.title) + '" allow="accelerometer; autoplay; clipboard-write; ' +
+    'encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>';
+  $('vlb').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeVideo(){
+  $('vlb').classList.remove('on');
+  $('vlbFrame').innerHTML = '';
+  document.body.style.overflow = '';
+}
+function dlgVideo(v){
+  var isNew = !v;
+  dlgOpen(
+    '<h3>' + (isNew ? 'New video' : 'Edit video') + '</h3>' +
+    '<div class="field"><label>YouTube link</label>' +
+    '<input id="vU" value="' + esc(isNew ? '' : (v.url || '')) + '" placeholder="https://youtu.be/… or /shorts/…"></div>' +
+    '<div class="field"><label>Title</label><input id="vT" value="' + esc(isNew ? '' : v.title) + '"></div>' +
+    '<div class="field"><label>Note (optional, one line)</label>' +
+    '<input id="vN" value="' + esc(isNew ? '' : (v.note || '')) + '" placeholder="Fantasy Skin — start to finish"></div>' +
+    '<label class="chk"><input type="checkbox" id="vD"' + ((!isNew && v.draft) ? ' checked' : '') + '> Draft (nobody sees it)</label>' +
+    '<div class="row2"><button class="btn-s" id="vOk">Save</button>' +
+    '<button class="btn-s ghost" id="vNo">Cancel</button>' +
+    (isNew ? '' : '<button class="btn-s danger" id="vDel" style="margin-left:auto">Delete</button>') + '</div>',
+    function(d){
+      d.querySelector('#vNo').onclick = dlgClose;
+      if (d.querySelector('#vDel')) d.querySelector('#vDel').onclick = function(){
+        C.videos = (C.videos||[]).filter(function(x){ return x !== v; });
+        dlgClose(); renderVideos(); save('Video deleted');
+      };
+      d.querySelector('#vOk').onclick = function(){
+        var url = d.querySelector('#vU').value.trim();
+        var id  = ytid(url);
+        if (!id){ msg('That link has no YouTube video id in it','err'); return; }
+        var o = { url:url, yt:id, tall:isShort(url),
+                  title:d.querySelector('#vT').value.trim() || 'Untitled',
+                  note:d.querySelector('#vN').value.trim(),
+                  draft:d.querySelector('#vD').checked };
+        if (isNew){ C.videos = C.videos || []; o.id = uid(); C.videos.push(o); }
+        else { v.url=o.url; v.yt=o.yt; v.tall=o.tall; v.title=o.title; v.note=o.note; v.draft=o.draft; }
+        dlgClose(); renderVideos(); save('Video saved');
+      };
+      d.querySelector('#vU').focus();
+    });
+}
+function dlgVidHead(){
+  var h = C.vhead || {};
+  var e = function(v){ return esc(v || ''); };
+  dlgOpen(
+    '<h3>Videos heading</h3>' +
+    '<div class="i18n-note">Los campos vienen con el texto actual. Editá lo que ' +
+    'quieras y guardá. Si borrás un campo y lo dejás vacío, vuelve a salir el ' +
+    'texto por defecto.</div>' +
+    '<div class="i18n-cols">' +
+      '<div>' +
+        '<div class="i18n-head">English</div>' +
+        '<div class="field"><label>Label</label><input id="wL" value="'+e(fresh(h.label) || VHEAD_EN.label)+'"></div>' +
+        '<div class="field"><label>Title</label><input id="wT" value="'+e(fresh(h.title) || VHEAD_EN.title)+'"></div>' +
+        '<div class="field"><label>Intro</label><textarea id="wS" style="min-height:110px">'+e(fresh(h.sub) || VHEAD_EN.sub)+'</textarea></div>' +
+        '<div class="field"><label>Channel button text</label><input id="wB" value="'+e(h.channelLabel || VHEAD_EN.channelLabel)+'"></div>' +
+      '</div>' +
+      '<div>' +
+        '<div class="i18n-head">Español</div>' +
+        '<div class="field"><label>Etiqueta</label><input id="wLe" value="'+e(h.label_es || VHEAD_ES.label)+'"></div>' +
+        '<div class="field"><label>Título</label><input id="wTe" value="'+e(h.title_es || VHEAD_ES.title)+'"></div>' +
+        '<div class="field"><label>Intro</label><textarea id="wSe" style="min-height:110px">'+e(h.sub_es || VHEAD_ES.sub)+'</textarea></div>' +
+        '<div class="field"><label>Texto del botón de canal</label><input id="wBe" value="'+e(h.channelLabel_es || VHEAD_ES.channelLabel)+'"></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="field"><label>Channel link (optional) — el enlace es el mismo en los dos idiomas</label>' +
+      '<input id="wC" value="'+e(h.channel)+'" placeholder="https://youtube.com/@…"></div>' +
+    '<div class="row2"><button class="btn-s" id="wOk">Save</button>' +
+    '<button class="btn-s ghost" id="wNo">Cancel</button></div>',
+    function(d){
+      var v = function(id){ return d.querySelector(id).value.trim(); };
+      d.querySelector('#wNo').onclick = dlgClose;
+      d.querySelector('#wOk').onclick = function(){
+        C.vhead = { label:v('#wL'), title:v('#wT'), sub:v('#wS'),
+                    channel:v('#wC'), channelLabel:v('#wB'),
+                    label_es:v('#wLe'), title_es:v('#wTe'), sub_es:v('#wSe'),
+                    channelLabel_es:v('#wBe') };
+        dlgClose(); renderVideos(); save('Videos heading saved');
+      };
+    });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   4. Panel del prompt
+   ══════════════════════════════════════════════════════════════════ */
 function openPanel(it){
   openItem = it;
   $('pvTitle').textContent = it.title;
-  $('pvShot').src = it.img;
+  $('pvShot').src = imgSrc(it.img);
   $('pvChars').textContent = (it.yaml||'').length + ' chars';
   paintPrompt();
   $('pv').classList.add('on'); $('pvScrim').classList.add('on');
@@ -1216,14 +1817,23 @@ function paintPrompt(){
   $('pvB').classList.toggle('on', view==='blocks');
   $('pvR').classList.toggle('on', view==='raw');
   if (view === 'raw'){ box.innerHTML = '<pre class="pv-raw">' + esc(y) + '</pre>'; return; }
-  var blocks = parseYAML(y);
-  if (!blocks.length){ box.innerHTML = '<div class="pv-blocks"><div class="bd">' + esc(y) + '</div></div>'; return; }
-  box.innerHTML = '<div class="pv-blocks">' + blocks.map(function(b,i){
-    var body = b.items.length
-      ? '<ul class="bd">' + b.items.map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('') + '</ul>'
-      : '<div class="bd">' + esc(b.text) + '</div>';
-    return '<details' + (i<2 ? ' open' : '') + '><summary>' + esc(b.label) + '</summary>' + body + '</details>';
-  }).join('') + '</div>';
+  var p = parsePrompt(y);
+  if (!p.sections.length && !(p.negative && p.negative.length)){
+    box.innerHTML = '<div class="pv-blocks"><div class="bd">' + esc(y) + '</div></div>'; return;
+  }
+  var parts = p.sections.map(function(sec,i){
+    var body = sec.fields.map(function(f){
+      return '<div class="fld"><span class="k">' + esc(f.label) + '</span> ' + esc(f.body) + '</div>';
+    }).join('');
+    return '<details' + (i<2 ? ' open' : '') + '><summary>' + esc(sec.label) +
+           ' <span class="cnt">' + sec.fields.length + '</span></summary>' + body + '</details>';
+  });
+  if (p.negative && p.negative.length){
+    parts.push('<details><summary>Negative Prompt <span class="cnt">' + p.negative.length +
+      '</span></summary><ul class="bd neg">' +
+      p.negative.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></details>');
+  }
+  box.innerHTML = '<div class="pv-blocks">' + parts.join('') + '</div>';
 }
 function copyPrompt(btn){
   var text = (openItem && openItem.yaml) || '';
@@ -1244,33 +1854,46 @@ function legacyCopy(text, done){
   ta.remove(); done(ok);
 }
 
-/* ── 4. Diálogos propios (window.prompt/confirm no sirven acá) ───── */
-function dlgOpen(html, wire){
-  var d = $('dlg'); d.innerHTML = html; $('dlgScrim').classList.add('on');
-  if (wire) wire(d);
-}
-function dlgClose(){ $('dlgScrim').classList.remove('on'); $('dlg').innerHTML = ''; }
+/* ══════════════════════════════════════════════════════════════════
+   5. Diálogos
+   ══════════════════════════════════════════════════════════════════ */
+function dlgOpen(html, wire){ var d=$('dlg'); d.innerHTML=html; $('dlgScrim').classList.add('on'); if(wire) wire(d); }
+function dlgClose(){ $('dlgScrim').classList.remove('on'); $('dlg').innerHTML=''; }
 
 function dlgHead(){
   var h = C.head || {};
+  var e = function(v){ return esc(v || ''); };
   dlgOpen(
     '<h3>Gallery heading</h3>' +
-    '<div class="field"><label>Label</label><input id="hL" value="'+esc(h.label||'')+'"></div>' +
-    '<div class="field"><label>Title</label><input id="hT" value="'+esc(h.title||'')+'"></div>' +
-    '<div class="field"><label>Intro</label><textarea id="hS" style="min-height:80px">'+esc(h.sub||'')+'</textarea></div>' +
+    '<div class="i18n-note">Los campos vienen con el texto actual. Editá lo que ' +
+    'quieras y guardá. Si borrás un campo y lo dejás vacío, vuelve a salir el ' +
+    'texto por defecto.</div>' +
+    '<div class="i18n-cols">' +
+      '<div>' +
+        '<div class="i18n-head">English</div>' +
+        '<div class="field"><label>Label</label><input id="hL" value="'+e(fresh(h.label) || HEAD_EN.label)+'"></div>' +
+        '<div class="field"><label>Title</label><input id="hT" value="'+e(fresh(h.title) || HEAD_EN.title)+'"></div>' +
+        '<div class="field"><label>Intro</label><textarea id="hS" style="min-height:150px">'+e(fresh(h.sub) || HEAD_EN.sub)+'</textarea></div>' +
+      '</div>' +
+      '<div>' +
+        '<div class="i18n-head">Español</div>' +
+        '<div class="field"><label>Etiqueta</label><input id="hLe" value="'+e(h.label_es || HEAD_ES.label)+'"></div>' +
+        '<div class="field"><label>Título</label><input id="hTe" value="'+e(h.title_es || HEAD_ES.title)+'"></div>' +
+        '<div class="field"><label>Intro</label><textarea id="hSe" style="min-height:150px">'+e(h.sub_es || HEAD_ES.sub)+'</textarea></div>' +
+      '</div>' +
+    '</div>' +
     '<div class="row2"><button class="btn-s" id="hOk">Save</button>' +
     '<button class="btn-s ghost" id="hNo">Cancel</button></div>',
     function(d){
+      var v = function(id){ return d.querySelector(id).value.trim(); };
       d.querySelector('#hNo').onclick = dlgClose;
       d.querySelector('#hOk').onclick = function(){
-        C.head = { label:d.querySelector('#hL').value.trim(),
-                   title:d.querySelector('#hT').value.trim(),
-                   sub:d.querySelector('#hS').value.trim() };
+        C.head = { label:v('#hL'), title:v('#hT'), sub:v('#hS'),
+                   label_es:v('#hLe'), title_es:v('#hTe'), sub_es:v('#hSe') };
         dlgClose(); render(); save('Heading saved');
       };
     });
 }
-
 function dlgItem(it){
   var isNew = !it;
   dlgOpen(
@@ -1278,8 +1901,8 @@ function dlgItem(it){
     '<div class="field"><label>Title</label><input id="iT" value="'+esc(isNew?'':it.title)+'" placeholder="Red Riding Hood"></div>' +
     '<div class="field"><label>Image' + (isNew?'':' (leave empty to keep the current one)') + '</label>' +
     '<input type="file" id="iF" accept="image/*"><img class="prev" id="iP"></div>' +
-    '<div class="field"><label>Prompt (YAML — paste it as it is)</label>' +
-    '<textarea id="iY" placeholder="task: ...&#10;framing:&#10;  - ...">'+esc(isNew?'':(it.yaml||''))+'</textarea></div>' +
+    '<div class="field"><label>Prompt (paste it from SPS as it is)</label>' +
+    '<textarea id="iY" placeholder="Primary subject: ...">'+esc(isNew?'':(it.yaml||''))+'</textarea></div>' +
     '<label class="chk"><input type="checkbox" id="iD"'+((!isNew&&it.draft)?' checked':'')+'> Draft (nobody sees it)</label>' +
     '<div class="row2"><button class="btn-s" id="iOk">Save</button>' +
     '<button class="btn-s ghost" id="iNo">Cancel</button>' +
@@ -1307,10 +1930,16 @@ function dlgItem(it){
         };
         if (blob){
           var name = IMGDIR + slug(t) + '-' + uid() + '.jpg';
-          msg('Uploading the image…','');
-          putFile(name, blob, true, 'gallery: ' + t)
-            .then(function(){ finish(name); })
-            .catch(function(e){ msg('Could not upload the image: ' + e.message, 'err'); });
+          if (TOKEN){
+            msg('Uploading the image…','');
+            putFile(name, blob, true, 'gallery: ' + t)
+              .then(function(){ finish(name); })
+              .catch(function(e){ msg('Could not upload the image: ' + e.message, 'err'); });
+          } else {
+            pendingImages[name] = blob;
+            try { blobURLs[name] = URL.createObjectURL(blob); } catch(e){}
+            finish(name);
+          }
         } else finish(null);
       };
     });
@@ -1319,8 +1948,6 @@ function slug(s){
   return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
     .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40) || 'img';
 }
-
-/* ── 5. Achicar la imagen en el navegador antes de subirla ───────── */
 function shrink(file, cb){
   var fr = new FileReader();
   fr.onload = function(){
@@ -1339,10 +1966,87 @@ function shrink(file, cb){
   fr.readAsDataURL(file);
 }
 
-/* ── 6. Guardar en GitHub ────────────────────────────────────────── */
-function b64(str){
-  return btoa(String.fromCharCode.apply(null, new TextEncoder().encode(str)));
+/* ══════════════════════════════════════════════════════════════════
+   6. Guardar — según el modo
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════════
+   LS — guardado local (IndexedDB)
+   Todo lo que editas vive en el navegador hasta que haces "Download
+   update". Sobrevive a cerrar y reabrir la pagina, imagenes incluidas.
+   localStorage no sirve aca: las fotos no caben.
+   ══════════════════════════════════════════════════════════════════ */
+var LS = (function(){
+  var DB = 'sps_gal_local', STORE = 'kv', KEY = 'state';
+  function open(){
+    return new Promise(function(res, rej){
+      var r = indexedDB.open(DB, 1);
+      r.onupgradeneeded = function(){ r.result.createObjectStore(STORE); };
+      r.onsuccess = function(){ res(r.result); };
+      r.onerror   = function(){ rej(r.error); };
+    });
+  }
+  function tx(mode, fn){
+    return open().then(function(db){
+      return new Promise(function(res, rej){
+        var t = db.transaction(STORE, mode), s = t.objectStore(STORE), out;
+        out = fn(s);
+        t.oncomplete = function(){ res(out && out.result !== undefined ? out.result : out); };
+        t.onerror    = function(){ rej(t.error); };
+      });
+    });
+  }
+  return {
+    save: function(){
+      try {
+        return tx('readwrite', function(s){
+          return s.put({ C: C, imgs: pendingImages, at: Date.now() }, KEY);
+        }).then(function(){ markLocal(true); })
+          .catch(function(e){ console.warn('LS.save', e); });
+      } catch(e){ console.warn('LS.save', e); return Promise.resolve(); }
+    },
+    load: function(){
+      try {
+        return tx('readonly', function(s){ return s.get(KEY); })
+          .catch(function(){ return null; });
+      } catch(e){ return Promise.resolve(null); }
+    },
+    wipe: function(){
+      try { return tx('readwrite', function(s){ return s.delete(KEY); })
+              .catch(function(){}); }
+      catch(e){ return Promise.resolve(); }
+    }
+  };
+})();
+function markLocal(on){
+  var d = $('adLocal'); if (!d) return;
+  d.textContent = on ? 'local ✓' : 'local —';
+  d.style.color = on ? 'var(--green,#4ade80)' : 'var(--text3)';
 }
+
+function save(what){
+  if (TOKEN){                                  // modo GitHub (opcional)
+    msg('Saving…','');
+    putFile(DATA, JSON.stringify(C,null,2), false, 'gallery: ' + what)
+      .then(function(){ msg(what + ' ✓ — GitHub Pages republishes in ~30 s','ok'); })
+      .catch(function(e){ msg('Could not save: ' + e.message,'err'); });
+    return;
+  }
+  dirty = true;                                // modo exportar
+  LS.save();                                   // y queda guardado en el navegador
+  updateDownloadBadge();
+  msg(what + ' ✓ — click “Download update” when you are done', 'ok');
+}
+function updateDownloadBadge(){
+  var b = $('adDownload'); if (!b) return;
+  var n = Object.keys(pendingImages).length;
+  b.textContent = 'Download update' + (n ? ' (' + n + ' new img)' : '');
+  b.classList.toggle('hot', dirty);
+}
+function msg(t, cls){ var m = $('adMsg'); if(m){ m.textContent = t; m.className = 'ad-msg ' + (cls||''); } }
+
+/* ── GitHub (solo si se pega un token) ── */
+function b64(str){ return btoa(String.fromCharCode.apply(null, new TextEncoder().encode(str))); }
 function blobB64(blob){
   return new Promise(function(res, rej){
     var fr = new FileReader();
@@ -1369,70 +2073,363 @@ function putFile(path, content, isBlob, message){
       if (cur.status === 200 && cur.body.sha) payload.sha = cur.body.sha;
       return api(path, { method:'PUT', body:JSON.stringify(payload) });
     });
-  }).then(function(r){
-    if (r.status >= 400) throw new Error(r.body.message || ('HTTP ' + r.status));
-    return r.body;
+  }).then(function(r){ if (r.status >= 400) throw new Error(r.body.message || ('HTTP ' + r.status)); return r.body; });
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   7. Exportar — arma un .zip (content.json + imágenes nuevas)
+      ZIP método STORE (sin comprimir): los JPG ya están comprimidos.
+   ══════════════════════════════════════════════════════════════════ */
+var CRC_TABLE = (function(){
+  var t = new Uint32Array(256);
+  for (var n=0;n<256;n++){ var c=n; for (var k=0;k<8;k++) c = (c&1) ? (0xEDB88320 ^ (c>>>1)) : (c>>>1); t[n]=c>>>0; }
+  return t;
+})();
+function crc32(u8){
+  var c = 0xFFFFFFFF;
+  for (var i=0;i<u8.length;i++) c = CRC_TABLE[(c ^ u8[i]) & 0xFF] ^ (c>>>8);
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function strBytes(s){ return new TextEncoder().encode(s); }
+function u16(n){ return [n&0xFF, (n>>>8)&0xFF]; }
+function u32(n){ return [n&0xFF, (n>>>8)&0xFF, (n>>>16)&0xFF, (n>>>24)&0xFF]; }
+function zipStore(files){
+  var chunks = [], central = [], offset = 0;
+  files.forEach(function(f){
+    var nameB = strBytes(f.name), data = f.data, crc = crc32(data);
+    var lh = [].concat(u32(0x04034b50), u16(20), u16(0), u16(0), u16(0), u16(0),
+                       u32(crc), u32(data.length), u32(data.length),
+                       u16(nameB.length), u16(0));
+    var lhB = new Uint8Array(lh);
+    chunks.push(lhB, nameB, data);
+    var thisOff = offset;
+    offset += lhB.length + nameB.length + data.length;
+    var ch = [].concat(u32(0x02014b50), u16(20), u16(20), u16(0), u16(0), u16(0), u16(0),
+                       u32(crc), u32(data.length), u32(data.length),
+                       u16(nameB.length), u16(0), u16(0), u16(0), u16(0), u32(0), u32(thisOff));
+    central.push(new Uint8Array(ch), nameB);
+  });
+  var cStart = offset, cSize = 0;
+  central.forEach(function(c){ cSize += c.length; });
+  var end = new Uint8Array([].concat(u32(0x06054b50), u16(0), u16(0),
+             u16(files.length), u16(files.length), u32(cSize), u32(cStart), u16(0)));
+  var all = chunks.concat(central); all.push(end);
+  return new Blob(all, { type:'application/zip' });
+}
+function downloadUpdate(){
+  var files = [{ name:'content.json', data:strBytes(JSON.stringify(C, null, 2)) }];
+  var names = Object.keys(pendingImages);
+  var chain = Promise.resolve();
+  names.forEach(function(p){
+    chain = chain.then(function(){
+      return pendingImages[p].arrayBuffer().then(function(ab){ files.push({ name:p, data:new Uint8Array(ab) }); });
+    });
+  });
+  chain.then(function(){
+    var blob = zipStore(files);
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a'); a.href = url; a.download = 'sps-update.zip';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    dirty = false; updateDownloadBadge();
+    msg('Downloaded sps-update.zip — unzip into your project folder, then upload it to GitHub', 'ok');
   });
 }
-function save(what){
-  if (!TOKEN){ msg('Paste the token before saving','err'); return; }
-  msg('Saving…','');
-  putFile(DATA, JSON.stringify(C, null, 2), false, 'gallery: ' + what)
-    .then(function(){ msg(what + ' ✓ — GitHub Pages takes ~30 s to republish','ok'); })
-    .catch(function(e){ msg('Could not save: ' + e.message, 'err'); });
-}
-function msg(t, cls){ var m = $('adMsg'); m.textContent = t; m.className = 'ad-msg ' + (cls||''); }
 
-/* ── 7. Arranque ─────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════
+   8. Arranque
+   ══════════════════════════════════════════════════════════════════ */
 function boot(){
   function checkAdmin(){
-    wantAdmin = /(^|[?&])admin(=|&|$)/.test(location.search) || location.hash === '#admin';
+    // Local (doble clic = file://): el admin aparece solo, sin escribir #admin.
+    // En el sitio publicado (https): solo con ?admin o #admin.
+    var isLocal = (location.protocol === 'file:');
+    wantAdmin = isLocal || /(^|[?&])admin(=|&|$)/.test(location.search) || location.hash === '#admin';
+    document.body.classList.toggle('is-admin', !!wantAdmin);
     $('adBar').style.display = wantAdmin ? 'flex' : 'none';
-    if (!wantAdmin){ document.body.classList.remove('admin'); if (C) render(); return; }
+    document.body.classList.toggle('admin', wantAdmin);      // el admin no exige token
+    if (!wantAdmin){ if (C) render(); return; }
     try { TOKEN = TOKEN || sessionStorage.getItem('sps_gh') || ''; } catch(e){}
-    if (TOKEN){ $('adTok').value = TOKEN; document.body.classList.add('admin'); }
+    if (TOKEN) $('adTok').value = TOKEN;
+    updateDownloadBadge();
     if (C) render();
   }
   checkAdmin();
-  // Escribir #admin en la barra de direcciones no recarga la pagina,
-  // asi que hay que escuchar el cambio de hash a mano.
   addEventListener('hashchange', checkAdmin);
+
   $('adTok').onchange = $('adTok').oninput = function(){
     TOKEN = this.value.trim();
-    document.body.classList.toggle('admin', !!TOKEN);
     try { sessionStorage.setItem('sps_gh', TOKEN); } catch(e){}
-    render();
-    msg(TOKEN ? 'Admin mode on' : 'No token \u2014 nothing can be saved', TOKEN ? 'ok' : '');
+    msg(TOKEN ? 'GitHub mode on — changes commit live' : 'Export mode — edits download as a zip', 'ok');
   };
+  if ($('adLoadBtn')) $('adLoadBtn').onclick = function(){ $('adLoad').click(); };
+  if ($('adLoad')) $('adLoad').onchange = function(){
+    var f = this.files && this.files[0]; this.value=''; if (!f) return;
+    var fr = new FileReader();
+    fr.onload = function(){
+      try {
+        var j = JSON.parse(fr.result);
+        if (!j || !j.items) throw 0;
+        C = j; C.items=C.items||[]; C.head=C.head||{}; C.videos=C.videos||[]; C.vhead=C.vhead||{};
+        pendingImages = {}; blobURLs = {}; dirty = false; usingSeed = false;
+        updateDownloadBadge(); render();
+        msg('Loaded ' + f.name + ' — editing from your current data', 'ok');
+      } catch(e){ msg('That file is not a valid content.json', 'err'); }
+    };
+    fr.readAsText(f);
+  };
+  if ($('adDownload')) $('adDownload').onclick = downloadUpdate;
+
   $('adEditHead').onclick = dlgHead;
+  $('adEditVid').onclick  = dlgVidHead;
+  $('vlbX').onclick = closeVideo;
+  $('vlb').onclick = function(e){ if (e.target === this) closeVideo(); };
   $('pvX').onclick = closePanel;
   $('pvScrim').onclick = closePanel;
   $('dlgScrim').onclick = function(e){ if (e.target === this) dlgClose(); };
-  addEventListener('keydown', function(e){ if (e.key === 'Escape'){ dlgClose(); closePanel(); } });
+  addEventListener('keydown', function(e){ if (e.key === 'Escape'){ dlgClose(); closePanel(); closeVideo(); } });
   $('pvB').onclick = function(){ view='blocks'; paintPrompt(); };
   $('pvR').onclick = function(){ view='raw';    paintPrompt(); };
   $('pvCopy').onclick = function(){ copyPrompt(this); };
   $('pvEdit').onclick = function(){ if (openItem) dlgItem(openItem); };
 
-  fetch(DATA, { cache:'no-store' })
-    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .catch(function(e){
-      usingSeed = true;
-      console.warn('[galeria] no pude leer ' + DATA + ' (' + e.message + '). Uso la copia de arranque.');
-      return FALLBACK;
-    })
-    .then(function(j){
-      C = (j && j.items) ? j : FALLBACK;
-      C.items = C.items || []; C.head = C.head || {};
-      render();
-      if (usingSeed && wantAdmin)
-        msg('Heads up: ' + DATA + ' could not be read \u2014 you are seeing the built-in seed. Do not save over it.', 'err');
+  /* el selector de idioma llama a esto para repintar los encabezados */
+  window.spsRerender = function(){
+    try { if (C) { render(); renderVideos(); } } catch(e){}
+  };
+
+
+  /* Empezar de cero: borra SOLO la copia de este navegador. */
+  if ($('adWipe')) $('adWipe').onclick = function(){
+    if (!confirm('¿Borrar todo lo que editaste en este navegador?\n\nNo toca nada de lo que ya este en GitHub.')) return;
+    C = JSON.parse(JSON.stringify(FALLBACK));
+    C.items = []; C.videos = []; C.cardImgs = {};
+    pendingImages = {}; blobURLs = {};
+    render(); updateDownloadBadge();
+    /* Guardamos el vacio en vez de borrar el store: si solo borraramos,
+       al recargar volveria a leer content.json y reaparecerian las piezas. */
+    LS.save().then(function(){
+      dirty = true;
+      msg('Empezaste de cero ✓ — “Load content.json” te devuelve lo que ya esta publicado', 'ok');
     });
+  };
+
+
+  /* Lo guardado en el navegador manda sobre content.json: es lo ultimo
+     que editaste y todavia no subiste. */
+  LS.load().then(function(local){
+    if (local && local.C){
+      C = local.C;
+      C.items = C.items || []; C.head = C.head || {};
+      C.videos = C.videos || []; C.vhead = C.vhead || {};
+      C.cardImgs = C.cardImgs || {};
+      pendingImages = local.imgs || {};
+      Object.keys(pendingImages).forEach(function(p){
+        try { blobURLs[p] = URL.createObjectURL(pendingImages[p]); } catch(e){}
+      });
+      dirty = true; usingSeed = false;
+      markLocal(true);
+      updateDownloadBadge(); render();
+      if (wantAdmin) msg('Continuing from your local copy — “Download update” when you are done', '');
+      return;
+    }
+    markLocal(false);
+    return fetch(DATA, { cache:'no-store' })
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .catch(function(e){ usingSeed = true; return FALLBACK; })
+      .then(function(j){
+        C = (j && j.items) ? j : FALLBACK;
+        C.items = C.items || []; C.head = C.head || {};
+        C.videos = C.videos || []; C.vhead = C.vhead || {};
+        C.cardImgs = C.cardImgs || {};
+        render();
+        if (usingSeed && wantAdmin)
+          msg('Starting from an empty gallery — add your pieces, or click “Load content.json”.', '');
+      });
+  });
 }
+
+/* ── puente para las fichas (ver el script de FICHAS mas abajo) ──
+   Se exponen funciones, no variables: pendingImages y blobURLs se reasignan
+   al cargar un content.json, y una referencia directa quedaria obsoleta. */
+window.spsCards = {
+  get:  function(){ return (C && C.cardImgs) || {}; },
+  src:  function(p){ return imgSrc(p); },
+  del:  function(id){
+          if (!C) return;
+          C.cardImgs = C.cardImgs || {};
+          delete C.cardImgs[id];
+          if (window.paintCards) window.paintCards();
+          save('Card image removed');
+        },
+  set:  function(id, file){
+          if (!C) return;
+          C.cardImgs = C.cardImgs || {};
+          shrink(file, function(blob){
+            var name = 'cards/' + String(id).toLowerCase() + '-' +
+                       Date.now().toString(36) + '.jpg';
+            if (TOKEN){
+              msg('Uploading the image…','');
+              putFile(name, blob, true, 'cards: ' + id)
+                .then(function(){
+                  C.cardImgs[id] = name;
+                  if (window.paintCards) window.paintCards();
+                  save('Card image saved');
+                })
+                .catch(function(e){ msg('Could not upload the image: ' + e.message, 'err'); });
+            } else {
+              pendingImages[name] = blob;
+              try { blobURLs[name] = URL.createObjectURL(blob); } catch(e){}
+              C.cardImgs[id] = name;
+              if (window.paintCards) window.paintCards();
+              save('Card image saved');
+            }
+          });
+        }
+};
+
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
 })();
 </script>
+<script>
+
+/* ══════════════════════════════════════════════════════════════════
+   FICHAS + IDIOMA
+   - CARD_TXT: textos ES/EN de las 42 fichas
+   - C.cardImgs: { "T1": "cards/xxx.jpg", ... }  vive en content.json
+   - admin: boton "+ img" por ficha -> reusa shrink() y pendingImages
+   ══════════════════════════════════════════════════════════════════ */
+(function(){
+  var CARD_TXT  = {"T1": {"es": "Carga hasta seis rostros en slots independientes. Cada uno lleva su propio lock de identidad, su propio cuerpo y su propia ropa. SPS escribe el bloque `MULTI-FACE IDENTITY LOCK` con instrucciones separadas por persona, para que el motor no promedie las caras entre sujetos — el error más común en escenas de pareja, grupo o familia.", "en": "Load up to six faces into independent slots. Each one carries its own identity lock, its own body and its own wardrobe. SPS writes the `MULTI-FACE IDENTITY LOCK` block with per-person instructions, so the engine can't average faces between subjects — the single most common failure in couple, group and family scenes."}, "T1.t": {"es": "Face Reference Gallery", "en": "Face Reference Gallery"}, "T2": {"es": "Subís una foto y Claude la lee. Devuelve un bloque de identidad escrito en lenguaje de prompt: forma del ojo, puente nasal, proporción de labios, estructura del pómulo, línea de mandíbula. No es un \"parecido aproximado\" — es la geometría del rostro escrita en texto, que es lo único que un motor de imagen sabe leer. Elegís Haiku (rápido y barato) o Sonnet (más fino).", "en": "Drop in a photo and Claude reads it. It returns an identity block written in prompt language: eye shape, nose bridge, lip proportion, cheekbone structure, jaw line. Not an approximate likeness — the actual geometry of the face written as text, which is the only thing an image engine can read. Pick Haiku (fast and cheap) or Sonnet (finer)."}, "T2.t": {"es": "AI Face Analysis", "en": "AI Face Analysis"}, "T3": {"es": "Lo mismo para el cuerpo. Claude lee la foto y escribe `BODY ANALYSIS` + `Body lock`: proporciones, largo de torso, ancho de hombros, estructura de cadera, continuidad de silueta. Es el bloque que evita que el personaje cambie de cuerpo entre una imagen y la siguiente.", "en": "The same for the body. Claude reads the photo and writes `BODY ANALYSIS` + `Body lock`: proportions, torso length, shoulder width, hip structure, silhouette continuity. This is the block that stops your character from changing bodies between one image and the next."}, "T3.t": {"es": "AI Body Analysis", "en": "AI Body Analysis"}, "T4": {"es": "Cuando no hay foto de referencia, construís el cuerpo a mano. 54 tipos base, 14 perfiles de identidad corporal y controles independientes para hombros, torso, cintura, glúteos, muslos, abdomen, vascularidad, definición muscular y lordosis. Se guarda como preset y se reusa.", "en": "With no reference photo, you build the body by hand. 54 base types, 14 body-identity profiles and independent controls for shoulders, torso, waist, glutes, thighs, core, vascularity, muscle definition and lordosis. Save it as a preset and reuse it."}, "T4.t": {"es": "Body Advanced Profile Builder", "en": "Body Advanced Profile Builder"}, "T5": {"es": "17 arrays de rasgos, 184 opciones en total: herencia, forma de cara, tono y textura de piel, forma de ojo, color de iris, cejas, nariz, labios, mandíbula, pómulos, frente, cuello, base de cabello, bigote, barba, patillas. Para construir un rostro que no existe y que igual sea consistente en cada generación.", "en": "17 trait arrays, 184 options in all: heritage, face shape, skin tone and texture, eye shape, iris colour, brows, nose, lips, jaw, cheekbones, forehead, neck, hair base, moustache, beard, sideburns. For building a face that doesn't exist and keeping it consistent across every generation."}, "T5.t": {"es": "Face Architect", "en": "Face Architect"}, "T6": {"es": "Un maniquí 3D real en el navegador — femenino, masculino o écorché anatómico. Posás hueso por hueso, girás la cámara, elegís el encuadre y la focal entre ultra gran angular y 400 mm. 23 materiales de render, de clay mate a wireframe y rayos X. Cargás objetos GLB propios. Exportás la pose como JSON o la mandás al prompt.", "en": "A real 3D mannequin in the browser — female, male or anatomical écorché. Pose it bone by bone, orbit the camera, pick the framing and the focal length from ultra-wide to 400 mm. 23 render materials, from matte clay to wireframe and x-ray. Load your own GLB objects. Export the pose as JSON or send it to the prompt."}, "T6.t": {"es": "Camera Pose Studio 3D", "en": "Camera Pose Studio 3D"}, "T7": {"es": "Convierte una foto en referencia de pose usable. Tres métodos de recorte — fondo plano, luminancia, o persona detectada por IA. Cuatro salidas: silueta, contorno, PNG recortado o mapa de profundidad generado por IA, con refinamiento extra por zonas. Corre local con ONNX: nada sube a ningún servidor.", "en": "Turns a photo into a usable pose reference. Three cutout methods — flat background, luminance, or AI-detected person. Four outputs: silhouette, outline, cutout PNG, or an AI-generated depth map with optional per-zone refinement. Runs locally on ONNX: nothing leaves your machine."}, "T7.t": {"es": "Alpha Pose Studio", "en": "Alpha Pose Studio"}, "T8": {"es": "La hoja de personaje. Mismo rostro, mismo cuerpo, mismo outfit, resuelto en varios ángulos a la vez — frontal, perfil izquierdo, perfil derecho, espalda. Sale en YAML o JSON, se exporta como PNG o se devuelve al prompt principal. Es el paso que falta entre \"me gustó esta imagen\" y \"ahora tengo un personaje\".", "en": "The character sheet. Same face, same body, same outfit, resolved across several angles at once — front, left profile, right profile, back. Outputs as YAML or JSON, exports as PNG, or goes back into the main prompt. It's the missing step between \"I like this image\" and \"now I have a character\"."}, "T8.t": {"es": "Character Sheet Studio", "en": "Character Sheet Studio"}, "T9": {"es": "Lo que ninguna librería de prompts hace. Cada galería tiene su botón **Analyze photo**: le das una foto — una locación, una prenda, una pose — y Claude crea **una ficha nueva** dentro de SPS, con su descripción en lenguaje de prompt y esa foto como preview. Once estudios. La librería deja de ser un catálogo cerrado.", "en": "What no prompt library does. Every gallery has its own **Analyze photo** button: hand it a photo — a location, a garment, a pose, a lens effect — and Claude creates **a brand-new tile** inside SPS, with its description in prompt language and that photo as its preview. Eleven studios. The library stops being a closed catalogue."}, "T9.t": {"es": "Los 11 estudios de análisis con API", "en": "The 11 AI analysis studios"}, "T10": {"es": "Real-ESRGAN nativo, no web. Tres modelos según el material — foto, detalle fino o ilustración — a 2x o 4x, con Recover Detail, intensidad, nitidez y reducción de ruido independientes, y slider antes/después. Corre en tu máquina: sin cola, sin crédito, sin subir la imagen.", "en": "Native Real-ESRGAN, not web-based. Three models depending on the material — photo, fine detail or illustration — at 2x or 4x, with independent Recover Detail, strength, sharpen and denoise, plus a before/after slider. Runs on your machine: no queue, no credits, nothing uploaded."}, "T10.t": {"es": "Upscaler Studio", "en": "Upscaler Studio"}, "T11": {"es": "Separación CMYK con ángulos de trama reales de imprenta, ocho formas de punto, frecuencia en LPI y salida a 150, 300 (DTF) o 600 DPI. Color, blanco y negro, duotono por capas o 1-bit. Exporta los canales C/M/Y/K por separado. Convierte una imagen generada en algo que de verdad se puede imprimir o serigrafiar.", "en": "CMYK separation with real press screen angles, eight dot shapes, LPI frequency and output at 150, 300 (DTF) or 600 DPI. Colour, black and white, layered duotone or 1-bit. Exports the C/M/Y/K channels separately. Turns a generated image into something you can actually print or screen-print."}, "T11.t": {"es": "Halftone Studio", "en": "Halftone Studio"}, "T12": {"es": "Un canvas de nodos para armar el prompt como un grafo en vez de un formulario. Nueve tipos de nodo lógicos — texto libre, skill pegado, rostro, variable, condicional, aleatorio — más 20 nodos que leen las librerías de SPS. Genera variantes controladas: una estructura que produce cincuenta prompts sin repetir combinación.", "en": "A node canvas for building the prompt as a graph instead of a form. Nine logical node types — free text, pasted skill, face, variable, conditional, random — plus 20 nodes that read the SPS libraries directly. Built for controlled variation: one structure that produces fifty prompts without repeating a combination."}, "T12.t": {"es": "Prompt Node Studio (Beta)", "en": "Prompt Node Studio (Beta)"}, "T13": {"es": "Constructor de rostros híbridos, dentro de SPS. Tres ruedas — ojos y cejas, nariz, boca y mentón — que girás hasta centrar el rasgo que querés. Subís una foto y SPS la parte sola en tres recortes macro 16:9, con prompts que bloquean la edad, quitan el maquillaje y prohíben el parecido con famosos. Sale como lámina PNG o como prompt de fusión.", "en": "A hybrid face builder, inside SPS. Three wheels — eyes and brows, nose, mouth and chin — which you turn until the feature you want is centred. Drop in a photo and SPS splits it into three 16:9 macro crops, with prompts that lock the age, strip makeup and forbid celebrity likeness. Comes out as a PNG sheet or a fusion prompt."}, "T13.t": {"es": "Simone Studio (Beta)", "en": "Simone Studio (Beta)"}, "T14": {"es": "**AI Director** genera escenas completas y coherentes: elige ropa, peinado, pose, expresión, ángulo, locación, luz y cámara de las listas reales de SPS, con una semilla distinta cada vez. Acepta una foto como *style reference*. **AI Creative** trabaja la dirección creativa. **Video Sequence** arma secuencias 9:16 o 16:9.", "en": "**AI Director** generates complete, coherent scene configurations: it picks clothing, hair, pose, expression, angle, location, lighting and camera from the real SPS lists, with a different seed each time. Feed it a photo as a *style reference*. **AI Creative** handles creative direction. **Video Sequence** builds 9:16 or 16:9 sequences."}, "T14.t": {"es": "AI Director · AI Creative · Video Sequence", "en": "AI Director · AI Creative · Video Sequence"}, "T15": {"es": "Los skills son bloques de prompt reusables que escribís una vez y aplicás siempre. Cada galería tiene su botón **SKILLS**, y el **Action Picker** (`⚡ ACTIONS`) inyecta acciones concretas — no \"posando\", sino el verbo exacto, la parte del cuerpo y el elemento del entorno que reacciona. Creás tus propios skills desde la app.", "en": "Skills are reusable prompt blocks you write once and apply forever. Every gallery has its **SKILLS** button, and the **Action Picker** (`⚡ ACTIONS`) injects concrete actions — not \"posing\", but the exact verb, the body part and the environmental element that reacts. Create your own skills from inside the app."}, "T15.t": {"es": "Skill & Tool Gallery + Action Picker", "en": "Skill & Tool Gallery + Action Picker"}, "T16": {"es": "Cada prompt que armás se guarda con su imagen resultante. Marcás favoritos a nivel de ficha individual — esta prenda, esta pose, este efecto — y los recuperás en un panel único sin volver a recorrer 2.000 tiles. Las Creations son todo lo que generaste con los estudios de análisis, separado de la librería base.", "en": "Every prompt you build is saved with the image it produced. Favourite individual tiles — this garment, this pose, this effect — and pull them back in a single panel without scrolling 2,000 tiles again. Creations are everything you generated with the analysis studios, kept separate from the base library."}, "T16.t": {"es": "Prompt Gallery · My Favorites · My Creations", "en": "Prompt Gallery · My Favorites · My Creations"}, "T17": {"es": "Para cuando el tema es la textura, no la persona. Ocho targets anatómicos con su propia óptica macro, sus keywords de detalle, su criterio de éxito y su lista de exclusiones. Activa el bloque `Micro-detail priority`, que le prohíbe al motor el suavizado CGI, el promediado de IA y la pasada de embellecimiento automático.", "en": "For when the subject is the texture, not the person. Eight anatomical targets, each with its own macro optics, detail keywords, success criterion and exclusion list. It activates the `Micro-detail priority` block, which forbids the engine its CGI smoothing, AI averaging and automatic beautification pass."}, "T17.t": {"es": "Macro Detail Studio", "en": "Macro Detail Studio"}, "T18": {"es": "Seis skins de interfaz, presets de UI, y exportación de todo: prompts en JSON, escena completa en YAML, UI Config v2.1, imágenes de las fichas y backup de librerías completas. Nada vive en la nube de nadie. Abrís la app mañana y está exactamente como la dejaste.", "en": "Six interface skins, UI presets, and export of everything: prompts as JSON, the full scene as YAML, UI Config v2.1, tile images and complete library backups. Nothing lives in anyone's cloud. Open the app tomorrow and it's exactly as you left it."}, "T18.t": {"es": "Control del proyecto", "en": "Project control"}, "M1": {"es": "La primera línea del prompt, y la que más decide. 14 presets fotográficos, cada uno con su lenguaje técnico de intensidad. Si el skin activo es de estilo no fotográfico, esta línea cambia sola a modo ilustración y SPS apaga cámara, lente y color science — porque pedirle grano de película a un dibujo es lo que rompe la imagen.", "en": "The first line of the prompt, and the one that decides the most. 14 photographic presets, each with its own technical strength language. If the active skin is a non-photographic style, this line switches itself to illustration mode and SPS turns off camera, lens and colour science — because asking a drawing for film grain is what breaks the image."}, "M1.t": {"es": "Photography preset", "en": "Photography preset"}, "M2": {"es": "Quién es. Tipo de sujeto, rango de edad, descripción física, estructura facial (10 opciones), tipo de cuerpo (54) y perfil de identidad corporal (14). Acá se engancha el bloque de identidad del rostro de referencia, y acá se decide si la escena es una persona, una pareja, un grupo, una familia, o ninguna — modo escena y objeto sin sujeto.", "en": "Who it is. Subject type, age range, physical description, facial structure (10 options), body type (54) and body-identity profile (14). This is where the reference face's identity block attaches, and where the scene becomes one person, a couple, a group, a family — or none, for scene-and-object work with no subject at all."}, "M2.t": {"es": "Primary subject", "en": "Primary subject"}, "M3": {"es": "Lo que hay que preservar del cuerpo aunque cambie todo lo demás: proporciones generales, relación de extremidades, largo de torso, ancho de hombros, estructura de cadera, continuidad de silueta. En escena de grupo preserva también las *relaciones* entre personas — diferencias de altura y contrastes de complexión.", "en": "What has to survive in the body even when everything else changes: overall proportions, limb ratio, torso length, shoulder width, hip structure, silhouette continuity. In a group scene it also preserves the *relationships* between people — height differences and build contrasts."}, "M3.t": {"es": "Body consistency instructions", "en": "Body consistency instructions"}, "M4": {"es": "125 expresiones y 366 poses, con subcategorías reales por contexto: retrato, pareja, maternidad, sensual, hero, villano, con animal, western, natación, auto, combate. Multi-Pose permite asignar una pose distinta a cada persona de la escena.", "en": "125 expressions and 366 poses, with real subcategories by context: portrait, couple, maternity, sensual, hero, villain, with animal, western, swimming, car, combat. Multi-Pose lets you assign a different pose to each person in the scene."}, "M4.t": {"es": "Facial expression + Pose", "en": "Facial expression + Pose"}, "M5": {"es": "El campo que separa un retrato de una escena. No \"posando\" — el verbo exacto, la parte del cuerpo que lo ejecuta, la dirección, el detalle sensorial y el elemento del entorno que reacciona. Es el campo que más cambia el resultado y el que casi nadie llena.", "en": "The field that separates a portrait from a scene. Not \"posing\" — the exact verb, the body part executing it, the direction, the sensory detail and the environmental element that reacts. The field that changes the result the most, and the one almost nobody fills in."}, "M5.t": {"es": "Subject action", "en": "Subject action"}, "M6": {"es": "131 peinados con categorías clásica, masculina, hero, villano, game engine y fantasy. El color se aplica por separado, con hex exacto, y SPS lo inyecta dentro de la descripción del peinado en vez de pegarlo al final — que es la diferencia entre \"cabello rubio\" y un rubio específico.", "en": "131 hairstyles across classic, male, hero, villain, game-engine and fantasy categories. Colour is applied separately with an exact hex, and SPS injects it *inside* the hairstyle description instead of tacking it on the end — which is the difference between \"blonde hair\" and one specific blonde."}, "M6.t": {"es": "Hairstyle", "en": "Hairstyle"}, "M7": {"es": "407 prendas: everyday, sensual, swimwear, masculina, parejas, hero, villano, game, cosplay, wizard, western, combate, moda, fantasy bikinis. Con outfits coordinados para pareja, asignación individual por persona en escena de grupo, y la opción de usar la ropa exacta de la foto de referencia.", "en": "407 garments: everyday, sensual, swimwear, men's, couples, hero, villain, game, cosplay, wizard, western, combat, fashion, fantasy bikinis. With coordinated couple outfits, per-person assignment in group scenes, and the option to use the exact clothing from your reference photo."}, "M7.t": {"es": "Wardrobe", "en": "Wardrobe"}, "M8": {"es": "55 estilos de maquillaje en siete familias: editorial, celebrity, aesthetic, K-beauty, glam, natural y fantasy. El color de labio es un control aparte, con su propio hex, porque el maquillaje y el color no se eligen juntos en la vida real.", "en": "55 makeup styles across seven families: editorial, celebrity, aesthetic, K-beauty, glam, natural and fantasy. Lip colour is a separate control with its own hex, because in real life makeup and colour aren't chosen together."}, "M8.t": {"es": "Makeup style + Lip color", "en": "Makeup style + Lip color"}, "M9": {"es": "244 materiales de piel: reptil, acuático, insecto, ave, mitológico, superhéroe, villano, criatura, cartoon, anime, material, bellas artes, textil, body paint y game. Con control de cobertura facial y un bloque `SCOPE` que define qué superficies se transforman y qué queda intacto — la diferencia entre escamas parciales y una transformación completa.", "en": "244 skin materials: reptile, aquatic, insect, bird, mythological, superhero, villain, creature, cartoon, anime, material, fine art, textile, body paint and game. With face-coverage control and a `SCOPE` block defining which surfaces transform and which stay untouched — the difference between partial scales and a full transformation."}, "M9.t": {"es": "Fantasy skin material", "en": "Fantasy skin material"}, "M10": {"es": "94 accesorios en trece categorías: lentes, sombreros, calzado, props y armas, joyería, relojes, bolsos, tech, deportes, belleza, fantasy, culturales y prótesis / FX. Se seleccionan varios a la vez y se asignan por persona en escenas de grupo.", "en": "94 accessories across thirteen categories: eyewear, headwear, footwear, props and weapons, jewelry, watches, bags, tech, sports, beauty, fantasy, cultural, and prosthetics / FX. Pick several at once and assign them per person in group scenes."}, "M10.t": {"es": "Accessories & props", "en": "Accessories & props"}, "M11": {"es": "71 vehículos: lujo, deportivos, off-road, motos, ATV/UTV, acuáticos, movie/TV y especiales. Entran al prompt como elemento de escena con su propia descripción, no como una palabra suelta.", "en": "71 vehicles: luxury, sports cars, off-road, motorcycles, ATV/UTV, watercraft, movie/TV and specials. They enter the prompt as a scene element with their own description, not as a loose keyword."}, "M11.t": {"es": "Vehicle in scene", "en": "Vehicle in scene"}, "M12": {"es": "257 locaciones en estudio, urbano, interior, naturaleza, viaje, cinematográfico, hero, villano, mundos alienígenas, Marvel MCU, DC, revista de moda, cómic, National Geographic, editorial, western, escenas con animales y combate. Se combinan con 10 climas, 7 horas del día y 10 atmósferas en una sola línea coherente.", "en": "257 locations across studio, urban, interior, nature, travel, cinematic, hero, villain, alien worlds, Marvel MCU, DC, fashion magazine, comic book, National Geographic, editorial, western, animal scenes and combat. Combined with 10 weather conditions, 7 times of day and 10 atmospheres into one coherent line."}, "M12.t": {"es": "Environment", "en": "Environment"}, "M13": {"es": "20 esquemas de luz, cada uno con su descriptor técnico completo, más un campo separado para el *comportamiento* de la luz: cómo cae, cómo rebota, cómo se corta. El esquema dice de dónde viene la luz; el comportamiento dice qué hace al llegar.", "en": "20 lighting schemes, each with its full technical descriptor, plus a separate field for light *behaviour*: how it falls, how it bounces, how it cuts. The scheme says where the light comes from; the behaviour says what it does when it arrives."}, "M13.t": {"es": "Lighting setup + Light behavior", "en": "Lighting setup + Light behavior"}, "M14": {"es": "83 ángulos de cámara, 14 reglas de composición, 6 recetas de encuadre y un campo de notas de framing. Más intención de profundidad de campo como control propio: foco total, desenfoque de fondo o bokeh extremo.", "en": "83 camera angles, 14 composition rules, 6 crop recipes and a framing-notes field. Plus depth-of-field intent as its own control: sharp throughout, blurred background, or extreme bokeh."}, "M14.t": {"es": "Camera Angle + Composition + Framing", "en": "Camera Angle + Composition + Framing"}, "M15": {"es": "El tono emocional de la imagen, en una línea. Es el campo que el motor usa para resolver todas las decisiones que el prompt no especificó — y siempre hay muchas.", "en": "The emotional tone of the image, in one line. It's the field the engine uses to resolve every decision the prompt didn't specify — and there are always many."}, "M15.t": {"es": "Mood", "en": "Mood"}, "M16": {"es": "17 cuerpos de cámara, 15 lentes con su focal mapeada, 12 aperturas y 19 velocidades de obturación, cada uno con su descriptor técnico real — no el nombre suelto. Un 85 mm f/1.4 escribe en el prompt lo que un 85 mm f/1.4 de verdad hace con la compresión facial y la caída del fondo.", "en": "17 camera bodies, 15 lenses with mapped focal lengths, 12 apertures and 19 shutter speeds, each with its real technical descriptor — not just the name. An 85 mm f/1.4 writes into the prompt what an actual 85 mm f/1.4 does to facial compression and background falloff."}, "M16.t": {"es": "Capture characteristics", "en": "Capture characteristics"}, "M17": {"es": "Ciencia de color y rendering como bloque propio, y 30 estilos de dirección visual con el descriptor completo de cada uno. No es \"estilo de fotógrafo\" como etiqueta: es la descripción de qué hace esa mirada con la luz, el color y el encuadre.", "en": "Colour science and rendering as its own block, and 30 visual-direction styles with the full descriptor for each. Not \"photographer style\" as a tag: the description of what that eye actually does with light, colour and framing."}, "M17.t": {"es": "Color science + Visual direction", "en": "Color science + Visual direction"}, "M18": {"es": "Las señales de profundidad, la temperatura del ambiente y la textura del entorno. Es el campo que hace que el fondo se sienta un lugar y no un telón.", "en": "Depth cues, ambient temperature and environmental texture. The field that makes the background feel like a place instead of a backdrop."}, "M18.t": {"es": "Scene detail", "en": "Scene detail"}, "M19": {"es": "El bloque que sostiene la continuidad: realismo anatómico, manos correctas, ojos reales, comportamiento correcto de la tela, estructura corporal proporcionada. En escena de varias personas se escribe un lock por sujeto con la instrucción explícita de no fundir ni promediar rasgos entre ellos.", "en": "The block that holds continuity: anatomical realism, correct hands, real eyes, accurate fabric behaviour, proportional body structure. In a multi-person scene it writes one lock per subject, with an explicit instruction not to blend or average features between them."}, "M19.t": {"es": "Consistency + Identity lock", "en": "Consistency + Identity lock"}, "M20": {"es": "Las notas sobre las imágenes de referencia cargadas — rostro, ropa, peinado, pose — y el detalle de piel como campo aparte. SPS lo suprime solo cuando hay un skin de criatura activo, porque afirmar piel humana contra una transformación de escamas es exactamente lo que produce cobertura parcial.", "en": "Notes on the loaded reference images — face, clothing, hairstyle, pose — and skin detail as its own field. SPS suppresses it automatically when a creature skin is active, because asserting human skin against a scale transformation is exactly what produces partial coverage."}, "M20.t": {"es": "Reference notes + Skin detail", "en": "Reference notes + Skin detail"}, "M21": {"es": "Cuatro modos con consecuencias reales. Smartphone Candid escribe 24 mm equivalente, leve movimiento de cámara, grano JPEG, microartefactos, encuadre imperfecto y foco profundo sin bokeh — porque eso es lo que hace que una foto no se lea como generada. Fine Art Cinematic, Raw Documentary y Editorial llevan cada uno su propio set.", "en": "Four modes with real consequences. Smartphone Candid writes 24 mm equivalent, slight camera shake, JPEG grain, micro artifacts, imperfect framing and deep focus with no bokeh — because that's what stops a photo from reading as generated. Fine Art Cinematic, Raw Documentary and Editorial each carry their own set."}, "M21.t": {"es": "Realism mode", "en": "Realism mode"}, "M22": {"es": "El cierre técnico del prompt, y cambia según lo que estés haciendo. En modo fotográfico pide textura de piel ultradetallada, ojos reales, manos correctas, pliegues naturales de tela. En modo ilustración pide lo contrario: trazo y sombreado consistentes, sin textura fotográfica de piel. El mismo campo pidiendo dos cosas opuestas, según corresponda.", "en": "The prompt's technical close, and it changes with what you're making. In photographic mode it asks for ultra-detailed skin texture, real eyes, correct hands, natural fabric folds. In illustration mode it asks for the opposite: consistent linework and shading, no photographic skin texture. The same field asking for two opposite things, correctly."}, "M22.t": {"es": "Quality target + Output goal", "en": "Quality target + Output goal"}, "M23": {"es": "Aspect ratio y resolución objetivo. Nueve relaciones desde 1:1 hasta 21:9 cinematográfico, más 4K. Escrito como especificación técnica — máximo detalle, sin compresión, nitidez a nivel de píxel — no como un número al final.", "en": "Aspect ratio and target resolution. Nine ratios from 1:1 to 21:9 cinematic, plus 4K. Written as a technical specification — maximum detail, no compression, pixel-level sharpness — not as a number tacked on the end."}, "M23.t": {"es": "Output specifications", "en": "Output specifications"}, "M24": {"es": "Lo que no debe aparecer, construido junto con el prompt y no después. Incluye el Anti-AI Realism Pack: el set de exclusiones que saca el look plástico, el suavizado de piel, la simetría imposible y la pasada de embellecimiento automático que delata una imagen generada.", "en": "What must not appear, built alongside the prompt rather than after it. Includes the Anti-AI Realism Pack: the exclusion set that strips out the plastic look, the skin smoothing, the impossible symmetry and the automatic beautification pass that gives a generated image away."}, "M24.t": {"es": "Negative prompt", "en": "Negative prompt"}, "lbl.tools": {"es": "Herramientas", "en": "Tools"}, "ttl.tools": {"es": "Las herramientas", "en": "The tools"}, "sub.tools": {"es": "Las 18 herramientas que hacen el trabajo. Lo que SPS hace antes de que exista un prompt.", "en": "The 18 tools that do the work. What SPS does before a prompt even exists."}, "lbl.mod": {"es": "Anatomia del prompt", "en": "Prompt anatomy"}, "ttl.mod": {"es": "Anatomía del prompt", "en": "Prompt anatomy"}, "sub.mod": {"es": "Los 24 bloques que SPS escribe por vos. Cada título es la etiqueta literal que sale en el prompt generado.", "en": "The 24 blocks SPS writes for you. Every title is the literal label that appears in the generated prompt."}};
+  var CARD_NAME = {"T1": "Face Reference Gallery", "T2": "AI Face Analysis", "T3": "AI Body Analysis", "T4": "Body Advanced Profile Builder", "T5": "Face Architect", "T6": "Camera Pose Studio 3D", "T7": "Alpha Pose Studio", "T8": "Character Sheet Studio", "T9": "Los 11 estudios de análisis con API", "T10": "Upscaler Studio", "T11": "Halftone Studio", "T12": "Prompt Node Studio (Beta)", "T13": "Simone Studio (Beta)", "T14": "AI Director · AI Creative · Video Sequence", "T15": "Skill & Tool Gallery + Action Picker", "T16": "Prompt Gallery · My Favorites · My Creations", "T17": "Macro Detail Studio", "T18": "Control del proyecto", "M1": "Photography preset", "M2": "Primary subject", "M3": "Body consistency instructions", "M4": "Facial expression + Pose", "M5": "Subject action", "M6": "Hairstyle", "M7": "Wardrobe", "M8": "Makeup style + Lip color", "M9": "Fantasy skin material", "M10": "Accessories & props", "M11": "Vehicle in scene", "M12": "Environment", "M13": "Lighting setup + Light behavior", "M14": "Camera Angle + Composition + Framing", "M15": "Mood", "M16": "Capture characteristics", "M17": "Color science + Visual direction", "M18": "Scene detail", "M19": "Consistency + Identity lock", "M20": "Reference notes + Skin detail", "M21": "Realism mode", "M22": "Quality target + Output goal", "M23": "Output specifications", "M24": "Negative prompt"};
+  var CARDDIR   = 'cards/';
+
+  /* ── idioma ── */
+  function getLang(){
+    try { var s = localStorage.getItem('sps_lang'); if (s === 'es' || s === 'en') return s; } catch(e){}
+    return (navigator.language || 'en').toLowerCase().indexOf('es') === 0 ? 'es' : 'en';
+  }
+  var LANG = getLang();
+  window.spsLang = function(){ return LANG; };
+
+  /* El copy trae **negrita** y `codigo` del original. Se escapa primero todo
+     el HTML y recien despues se convierten esas dos marcas — asi el texto
+     nunca puede inyectar markup. */
+  function fmt(s){
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+      .replace(/\*([^*\n]+)\*/g, '<i>$1</i>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>');
+  }
+
+  function applyLang(l){
+    LANG = (l === 'es') ? 'es' : 'en';
+    try { localStorage.setItem('sps_lang', LANG); } catch(e){}
+    document.documentElement.setAttribute('lang', LANG);
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var k = el.getAttribute('data-i18n');
+      var t = CARD_TXT[k];
+      if (t) el.innerHTML = fmt(t[LANG] || t.en || '');
+    });
+    var es = document.getElementById('lbES'), en = document.getElementById('lbEN');
+    if (es) es.classList.toggle('on', LANG === 'es');
+    if (en) en.classList.toggle('on', LANG === 'en');
+    /* encabezados de galeria y videos: viven en content.json, no en data-i18n */
+    if (window.spsRerender) window.spsRerender();
+  }
+  var bar = document.getElementById('langBar');
+  if (bar) bar.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-lang]');
+    if (b) applyLang(b.getAttribute('data-lang'));
+  });
+  applyLang(LANG);
+
+  /* En pantallas angostas la barra de idioma es fixed y tapaba el titulo de
+     la ficha. Se esconde al bajar y reaparece al subir — como una barra de
+     navegacion de app. En pantalla ancha no estorba, asi que no se toca. */
+  if (bar && window.matchMedia('(max-width:560px)').matches){
+    var lastY = window.pageYOffset, ticking = false;
+    window.addEventListener('scroll', function(){
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function(){
+        var y = window.pageYOffset;
+        if (y > 120 && y > lastY + 6)      bar.classList.add('lb-hide');
+        else if (y < lastY - 6 || y < 120) bar.classList.remove('lb-hide');
+        lastY = y; ticking = false;
+      });
+    }, { passive:true });
+  }
+
+  /* ── pintar las imagenes guardadas ── */
+  function paintCards(){
+    if (!window.spsCards) return;
+    var map = window.spsCards.get();
+    document.querySelectorAll('.cardx').forEach(function(card){
+      var id   = card.getAttribute('data-card');
+      var path = map[id];
+      var shot = card.querySelector('.cardx-shot');
+      if (!shot) return;
+      if (path){
+        var src = window.spsCards.src(path);
+        shot.style.backgroundImage = 'url("' + src + '")';
+        shot.innerHTML = '<span class="shot-name">' + (CARD_NAME[id] || '') + '</span>';
+        card.classList.add('has-shot');
+      } else {
+        shot.style.backgroundImage = '';
+        shot.innerHTML = '';
+        card.classList.remove('has-shot', 'show-shot');
+      }
+    });
+  }
+  window.paintCards = paintCards;
+
+  /* ── movil: mantener el dedo muestra la imagen, al soltar vuelve ── */
+  var coarse = window.matchMedia && window.matchMedia('(hover:none)').matches;
+  document.querySelectorAll('.cardx').forEach(function(card){
+    var show = function(){ if (card.classList.contains('has-shot')) card.classList.add('show-shot'); };
+    var hide = function(){ card.classList.remove('show-shot'); };
+    card.addEventListener('touchstart', show, { passive:true });
+    card.addEventListener('touchend',    hide);
+    card.addEventListener('touchcancel', hide);
+    card.addEventListener('touchmove',   hide, { passive:true });
+    if (coarse){ card.addEventListener('mousedown', show); card.addEventListener('mouseup', hide); }
+    card.addEventListener('blur', hide);
+  });
+
+  /* ── admin: agregar / quitar la imagen de una ficha ── */
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-addimg]');
+    if (!btn) return;
+    e.preventDefault(); e.stopPropagation();
+    var id = btn.getAttribute('data-addimg');
+    if (!window.spsCards) return;
+
+    if (window.spsCards.get()[id]){
+      var q = (LANG === 'es')
+        ? ('Quitar la imagen de ' + id + '?\n\nAceptar = quitarla  ·  Cancelar = elegir otra')
+        : ('Remove the image on ' + id + '?\n\nOK = remove it  ·  Cancel = pick another');
+      if (confirm(q)){ window.spsCards.del(id); return; }
+    }
+    var inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*';
+    inp.onchange = function(){
+      var f = this.files && this.files[0];
+      if (f) window.spsCards.set(id, f);
+    };
+    inp.click();
+  });
+
+  /* el puente se crea cuando corre el script principal; esperamos a que exista */
+  var tries = 0;
+  (function wait(){
+    if (window.spsCards){ paintCards(); return; }
+    if (tries++ < 80) setTimeout(wait, 120);
+  })();
+})();
+
+</script>
 </body>
 </html>
-
