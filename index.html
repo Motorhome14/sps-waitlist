@@ -656,6 +656,13 @@ body.is-admin { padding-bottom:96px; }
 #dlg { max-width:860px; }
 @media(max-width:760px){ .i18n-cols { grid-template-columns:1fr; gap:4px; } #dlg{ max-width:94vw; } }
 
+/* La barra de idioma vive por encima de todo (z-index 90). Mientras haya un
+   overlay abierto se aparta, para no tapar sus botones. */
+.langbar { transition:transform .22s ease, opacity .22s ease; }
+body.overlay-on .langbar {
+  transform:translateY(-140%); opacity:0; pointer-events:none;
+}
+
 /* Higgsfield: nota al pie de la lista de motores */
 .model-note {
   max-width:640px; margin:26px auto 0; padding:14px 18px;
@@ -1731,11 +1738,11 @@ function playVideo(v){
   $('vlbFrame').innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + v.yt +
     '?autoplay=1&rel=0" title="' + esc(v.title) + '" allow="accelerometer; autoplay; clipboard-write; ' +
     'encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>';
-  $('vlb').classList.add('on');
+  $('vlb').classList.add('on'); syncOverlay();
   document.body.style.overflow = 'hidden';
 }
 function closeVideo(){
-  $('vlb').classList.remove('on');
+  $('vlb').classList.remove('on'); syncOverlay();
   $('vlbFrame').innerHTML = '';
   document.body.style.overflow = '';
 }
@@ -1817,17 +1824,25 @@ function dlgVidHead(){
 /* ══════════════════════════════════════════════════════════════════
    4. Panel del prompt
    ══════════════════════════════════════════════════════════════════ */
+
+/* Hay overlay abierto? -> esconder la barra de idioma. Se consulta el DOM en
+   vez de contar aperturas, asi anidar panel + dialogo funciona solo. */
+function syncOverlay(){
+  var on = document.querySelector('.pv.on, .dlg-scrim.on, .vlb.on');
+  document.body.classList.toggle('overlay-on', !!on);
+}
+
 function openPanel(it){
   openItem = it;
   $('pvTitle').textContent = it.title;
   $('pvShot').src = imgSrc(it.img);
   $('pvChars').textContent = (it.yaml||'').length + ' chars';
   paintPrompt();
-  $('pv').classList.add('on'); $('pvScrim').classList.add('on');
+  $('pv').classList.add('on'); $('pvScrim').classList.add('on'); syncOverlay();
   document.body.style.overflow = 'hidden';
 }
 function closePanel(){
-  $('pv').classList.remove('on'); $('pvScrim').classList.remove('on');
+  $('pv').classList.remove('on'); $('pvScrim').classList.remove('on'); syncOverlay();
   document.body.style.overflow = ''; openItem = null;
 }
 function paintPrompt(){
@@ -1875,8 +1890,8 @@ function legacyCopy(text, done){
 /* ══════════════════════════════════════════════════════════════════
    5. Diálogos
    ══════════════════════════════════════════════════════════════════ */
-function dlgOpen(html, wire){ var d=$('dlg'); d.innerHTML=html; $('dlgScrim').classList.add('on'); if(wire) wire(d); }
-function dlgClose(){ $('dlgScrim').classList.remove('on'); $('dlg').innerHTML=''; }
+function dlgOpen(html, wire){ var d=$('dlg'); d.innerHTML=html; $('dlgScrim').classList.add('on'); if(wire) wire(d); syncOverlay(); }
+function dlgClose(){ $('dlgScrim').classList.remove('on'); $('dlg').innerHTML=''; syncOverlay(); }
 
 function dlgHead(){
   var h = C.head || {};
